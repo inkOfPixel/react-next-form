@@ -21,11 +21,6 @@
   "peerDependencies": {
     "react": ">=16"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "name": "next-form",
   "author": "macs",
   "module": "dist/next-form.esm.js",
