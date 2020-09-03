@@ -1,66 +1,23 @@
+import { produce, produceWithPatches } from "immer";
+import { get, isEqual, set, unset, update } from "lodash";
 import React from "react";
-import { produceWithPatches, produce, applyPatches, Patch, Draft } from "immer";
-import { get, set, update, unset, isEqual } from "lodash";
-import { UseFormOptions, FormState } from "./types";
+import { reducer } from "./reducers";
+import {
+  Action,
+  ActionTypes,
+  FieldProps,
+  FieldPropsOptions,
+  FormContext,
+  FormOptions,
+  ResetOptions,
+  State,
+} from "./types";
+import { isEvent } from "./utils";
 
-export interface FormContext<V> {
-  initialValues: V;
-  values: V;
-  patches: Patch[];
-  inversePatches: Patch[];
-  dirtyFields: DeepFlagMap;
-  touchedFields: DeepFlagMap;
-  fieldProps: (name: FieldPropsOptions | string) => FieldProps;
-  submit: () => void;
-  /** Reset to initial values */
-  reset: (options?: ResetOptions<V>) => void;
-  list: <T>(name: string) => ListField<T>;
-}
-
-interface ListField<T> {
-  push: (value: T) => void;
-  swap: (indexA: number, indexB: number) => void;
-  move: (from: number, to: number) => void;
-  insert: (index: number, value: T) => void;
-  /** Add value at the beginning */
-  unshift: (value: T) => number;
-  remove: (index: number) => T | undefined;
-  pop: () => T | undefined;
-  replace: (index: number, value: T) => void;
-}
-
-// form.listField("addresses").push(value)
-// const form = useForm()
-
-interface DeepFlagMap {
-  [key: string]: boolean | DeepFlagMap;
-}
-
-interface ResetOptions<V> {
-  initialValues?: V;
-  keepDirtyFields?: boolean;
-  keepTouchedStatus?: boolean;
-}
-
-interface FieldPropsOptions {
-  name: string;
-  type?: string;
-  /** Used for checkboxes */
-  value?: string | number;
-}
-
-interface FieldProps {
-  name: string;
-  type?: string;
-  onChange(event: React.ChangeEvent<HTMLInputElement>): void;
-  onChange(value: any): void;
-  onBlur: (event?: React.FocusEvent<HTMLInputElement>) => void;
-  value?: string | number | string[];
-  checked?: boolean;
-}
-
-export function useForm<V = any>(options: UseFormOptions<V>): FormContext<V> {
-  const [state, setState] = React.useState<FormState<V>>({
+export function useForm<V = any>(options: FormOptions<V>): FormContext<V> {
+  const [state, dispatch] = React.useReducer<
+    React.Reducer<State<V>, Action<V>>
+  >(reducer, {
     initialValues: options.initialValues,
     values: options.initialValues,
     patches: [],
@@ -70,119 +27,17 @@ export function useForm<V = any>(options: UseFormOptions<V>): FormContext<V> {
   });
 
   const submit = React.useCallback(() => {
-    console.log("submit");
+    dispatch({
+      type: ActionTypes.SUBMIT,
+    });
   }, []);
 
-  const reset = React.useCallback(
-    (options: ResetOptions<V> = {}) => {
-      const {
-        initialValues,
-        keepDirtyFields = false,
-        keepTouchedStatus = false,
-      } = options;
-
-      if (initialValues) {
-        let nextValues = initialValues;
-        if (keepDirtyFields) {
-          nextValues = applyPatches(initialValues, state.patches);
-        }
-        setState(
-          produce((draft: Draft<FormState<any>>) => {
-            draft.initialValues = initialValues;
-            draft.values = nextValues;
-            if (!keepDirtyFields) {
-              draft.dirtyFields = {};
-              draft.patches = [];
-              draft.inversePatches = [];
-            }
-            if (!keepTouchedStatus) {
-              draft.touchedFields = {};
-            }
-          })
-        );
-      } else {
-        setState(
-          produce((draft: Draft<FormState<any>>) => {
-            draft.values = draft.initialValues;
-            draft.dirtyFields = {};
-            if (!keepTouchedStatus) {
-              draft.touchedFields = {};
-            }
-            draft.patches = [];
-            draft.inversePatches = [];
-          })
-        );
-      }
-    },
-    [state]
-  );
-
-  const onChange = React.useCallback(
-    (value: unknown, name: string) => {
-      const [nextValues, patches, inversePatches] = produceWithPatches(
-        state.values,
-        (draft) => {
-          if (value === undefined) {
-            unset(draft, name);
-          } else {
-            set(draft as any, name, value);
-          }
-        }
-      );
-      const nextDirtyFields = produce(state.dirtyFields, (draft) => {
-        if (isEqual(get(nextValues, name), get(state.initialValues, name))) {
-          unset(draft, name);
-        } else {
-          set(draft, name, true);
-        }
-      });
-      setState((currentState) => {
-        return {
-          ...currentState,
-          values: nextValues,
-          dirtyFields: nextDirtyFields,
-          patches: currentState.patches.concat(patches),
-          inversePatches: currentState.inversePatches.concat(inversePatches),
-        };
-      });
-    },
-    [state]
-  );
-
-  const onBlur = React.useCallback((name: string) => {
-    setState(
-      produce((draft: Draft<FormState<any>>) => {
-        set(draft.touchedFields, name, true);
-      })
-    );
+  const reset = React.useCallback((options: ResetOptions<V> = {}) => {
+    dispatch({
+      type: ActionTypes.RESET,
+      options,
+    });
   }, []);
-
-  const handleChangeEvent = React.useCallback(
-    (options: FieldPropsOptions) => (
-      x: React.ChangeEvent<HTMLInputElement> | unknown
-    ) => {
-      let type = options.type;
-      let value: any = options.value;
-      if (isEvent(x)) {
-        type = type || x.currentTarget.type;
-        if (type === "checkbox") {
-          const nextChecked = x.currentTarget.checked;
-          console.log({ value, nextChecked });
-          if (value === undefined) {
-            value = nextChecked;
-          } else if (nextChecked === false) {
-            value = undefined;
-          }
-        } else {
-          value = value || x.currentTarget.value;
-        }
-      } else {
-        value = x;
-      }
-      onChange(value, options.name);
-    },
-    [onChange]
-  );
 
   const fieldProps = React.useCallback(
     (options: FieldPropsOptions | string): FieldProps => {
@@ -199,8 +54,43 @@ export function useForm<V = any>(options: UseFormOptions<V>): FormContext<V> {
       const stateValue = get(state.values, name);
       const props: FieldProps = {
         name,
-        onChange: handleChangeEvent({ name, type, value }),
-        onBlur: () => onBlur(name),
+        onChange: (x: React.ChangeEvent<HTMLInputElement> | unknown) => {
+          let nextValue: unknown;
+          if (isEvent(x)) {
+            nextValue = x.currentTarget.value;
+            if (x.currentTarget.type === "checkbox") {
+              if (x.currentTarget.value == null) {
+                nextValue = x.currentTarget.checked;
+              } else if (x.currentTarget.checked === false) {
+                nextValue = undefined;
+              }
+            }
+          } else {
+            if (type === "checkbox") {
+              if (value == null) {
+                nextValue = x;
+              } else {
+                if (x === false) {
+                  nextValue = undefined;
+                } else {
+                  nextValue = value;
+                }
+              }
+            }
+          }
+          dispatch({
+            type: ActionTypes.CHANGE,
+            payload: {
+              name,
+              value: nextValue,
+            },
+          });
+        },
+        onBlur: () =>
+          dispatch({
+            type: ActionTypes.BLUR,
+            payload: { name },
+          }),
       };
       if (type === "checkbox") {
         props.checked =
@@ -213,7 +103,7 @@ export function useForm<V = any>(options: UseFormOptions<V>): FormContext<V> {
       }
       return props;
     },
-    [state.values, onBlur, handleChangeEvent]
+    [state.values]
   );
 
   const push = React.useCallback(
@@ -305,8 +195,4 @@ export function useListField<V = any>(
   options: UseListFieldOptions<V>
 ): UseListFieldReturn<V> {
   return {};
-}
-
-function isEvent(obj: unknown): obj is React.ChangeEvent<HTMLInputElement> {
-  return typeof obj === "object" && (obj as any)?.nativeEvent instanceof Event;
 }
