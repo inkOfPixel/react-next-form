@@ -2,7 +2,7 @@ import { Patch } from "immer";
 
 export interface FormOptions<V> {
   initialValues: V;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 }
 
 export interface FormContext<V> {
@@ -20,15 +20,15 @@ export interface FormContext<V> {
 }
 
 export interface ListField<T> {
-  push: (value: T) => void;
-  swap: (indexA: number, indexB: number) => void;
-  move: (from: number, to: number) => void;
-  insert: (index: number, value: T) => void;
+  append: (value: T) => void;
+  // swap: (indexA: number, indexB: number) => void;
+  // move: (from: number, to: number) => void;
+  // insert: (index: number, value: T) => void;
   /** Add value at the beginning */
-  unshift: (value: T) => number;
-  remove: (index: number) => T | undefined;
-  pop: () => T | undefined;
-  replace: (index: number, value: T) => void;
+  // unshift: (value: T) => number;
+  remove: (index: number) => void;
+  // pop: () => T | undefined;
+  // replace: (index: number, value: T) => void;
 }
 
 interface DeepFlagMap {
@@ -47,8 +47,8 @@ export interface FieldProps {
   type?: string;
   onChange(event: React.ChangeEvent<HTMLInputElement>): void;
   onChange(value: any): void;
-  onBlur: (event?: React.FocusEvent<HTMLInputElement>) => void;
-  value?: string | number | string[];
+  onBlur: (event?: React.FocusEvent<HTMLElement>) => void;
+  value?: string | number;
   checked?: boolean;
 }
 
@@ -66,13 +66,17 @@ export enum ActionTypes {
   BLUR = "BLUR",
   RESET = "RESET",
   SUBMIT = "SUBMIT",
+  LIST_APPEND = "LIST_APPEND",
+  LIST_REMOVE = "LIST_REMOVE",
 }
 
 export type Action<V> =
   | ChangeAction
   | BlurAction
   | SubmitAction
-  | ResetAction<V>;
+  | ResetAction<V>
+  | ListAppendAction
+  | ListRemoveAction;
 
 export interface ChangeAction {
   type: ActionTypes.CHANGE;
@@ -96,6 +100,22 @@ export interface ResetAction<V> {
 
 export interface SubmitAction {
   type: ActionTypes.SUBMIT;
+}
+
+export interface ListAppendAction {
+  type: ActionTypes.LIST_APPEND;
+  payload: {
+    path: string;
+    value: unknown;
+  };
+}
+
+export interface ListRemoveAction {
+  type: ActionTypes.LIST_REMOVE;
+  payload: {
+    path: string;
+    index: number;
+  };
 }
 
 export interface ResetOptions<V> {

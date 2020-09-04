@@ -1,5 +1,4 @@
-import { produce, produceWithPatches } from "immer";
-import { get, isEqual, set, unset, update } from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { reducer } from "./reducers";
 import {
@@ -13,8 +12,19 @@ import {
   State,
 } from "./types";
 import { isEvent } from "./utils";
+import { enablePatches } from "immer";
 
-export function useForm<V = any>(options: FormOptions<V>): FormContext<V> {
+enablePatches();
+
+export function useNothing() {
+  React.useEffect(() => {
+    console.log("I'm doing absolutely nothing");
+  }, []);
+}
+
+export function useForm<V extends Record<string, any> = any>(
+  options: FormOptions<V>
+): FormContext<V> {
   const [state, dispatch] = React.useReducer<
     React.Reducer<State<V>, Action<V>>
   >(reducer, {
@@ -106,67 +116,20 @@ export function useForm<V = any>(options: FormOptions<V>): FormContext<V> {
     [state.values]
   );
 
-  const push = React.useCallback(
-    (name: string, value: any) => {
-      const [nextValues, patches, inversePatches] = produceWithPatches(
-        state.values,
-        (draft) => {
-          update(draft as any, name, (list) => {
-            const newList = list || [];
-            newList.push(value);
-            return newList;
-          });
-        }
-      );
-      const nextDirtyFields = produce(state.dirtyFields, (draft) => {
-        if (isEqual(get(nextValues, name), get(state.initialValues, name))) {
-          unset(draft, name);
-        } else {
-          set(draft, name, true);
-        }
-      });
-      setState((currentState) => ({
-        ...currentState,
-        values: nextValues,
-        dirtyFields: nextDirtyFields,
-        patches: currentState.patches.concat(patches),
-        inversePatches: currentState.inversePatches.concat(inversePatches),
-      }));
-    },
-    [state]
-  );
-
-  const remove = React.useCallback(
-    (name: string, index: number) => {
-      const [nextValues, patches, inversePatches] = produceWithPatches(
-        state.values,
-        (draft) => {
-          update(draft as any, name, (list) => {
-            const newList = list || [];
-            if (newList.length > 0) {
-              newList.splice(index, 1);
-            }
-            return newList;
-          });
-        }
-      );
-      const nextDirtyFields = produce(state.dirtyFields, (draft) => {
-        if (isEqual(get(nextValues, name), get(state.initialValues, name))) {
-          unset(draft, name);
-        } else {
-          set(draft, name, true);
-        }
-      });
-      setState((currentState) => ({
-        ...currentState,
-        values: nextValues,
-        dirtyFields: nextDirtyFields,
-        patches: currentState.patches.concat(patches),
-        inversePatches: currentState.inversePatches.concat(inversePatches),
-      }));
-    },
-    [state]
-  );
+  const list = React.useCallback<FormContext<V>["list"]>((name) => {
+    return {
+      append: (value) =>
+        dispatch({
+          type: ActionTypes.LIST_APPEND,
+          payload: { path: name, value },
+        }),
+      remove: (index) =>
+        dispatch({
+          type: ActionTypes.LIST_REMOVE,
+          payload: { path: name, index },
+        }),
+    };
+  }, []);
 
   const form = React.useMemo<FormContext<V>>(() => {
     return {
@@ -175,24 +138,13 @@ export function useForm<V = any>(options: FormOptions<V>): FormContext<V> {
       dirtyFields: state.dirtyFields,
       touchedFields: state.touchedFields,
       submit,
-      reset: reset(state, setState),
+      reset,
       fieldProps,
       patches: state.patches,
       inversePatches: state.inversePatches,
-      push,
-      remove,
+      list,
     };
-  }, [state, submit, fieldProps, push, remove]);
+  }, [state, submit, fieldProps, list]);
 
   return form;
-}
-
-export interface UseListFieldOptions<V> {}
-
-export interface UseListFieldReturn<V> {}
-
-export function useListField<V = any>(
-  options: UseListFieldOptions<V>
-): UseListFieldReturn<V> {
-  return {};
 }
