@@ -12,7 +12,6 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "playground": "cd example; yarn start;",
     "docs": "cd docs; yarn start;",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
