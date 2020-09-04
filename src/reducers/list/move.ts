@@ -1,18 +1,20 @@
 import produce, { produceWithPatches } from "immer";
 import { get, isEqual, set, unset, update } from "lodash";
-import { ListRemoveAction, State } from "../../types";
+import { ListMoveAction, State } from "../../types";
 
-export const remove = <V>(state: State<V>, action: ListRemoveAction) => {
-  const { path, index } = action.payload;
+export const move = <V>(state: State<V>, action: ListMoveAction) => {
+  const { path, from, to } = action.payload;
 
   const [nextValues, patches, inversePatches] = produceWithPatches(
     state.values,
     (draft) => {
-      update(draft as any, path, (list) => {
+      update(draft as any, path, (list: unknown) => {
         const updatedList = list || [];
-        if (updatedList.length > 0) {
-          updatedList.splice(index, 1);
+        if (!Array.isArray(updatedList)) {
+          throw new Error(`value at path "${path}" is not an array`);
         }
+        const [item] = updatedList.splice(from, 1);
+        updatedList.splice(to, 0, item);
         return updatedList;
       });
     }

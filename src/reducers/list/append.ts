@@ -9,9 +9,9 @@ export const append = <V>(state: State<V>, action: ListAppendAction) => {
     state.values,
     (draft) => {
       update(draft as any, path, (list) => {
-        const newList = list || [];
-        newList.push(value);
-        return newList;
+        const updatedList = list || [];
+        updatedList.push(value);
+        return updatedList;
       });
     }
   );

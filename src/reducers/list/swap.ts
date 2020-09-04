@@ -1,18 +1,18 @@
 import produce, { produceWithPatches } from "immer";
 import { get, isEqual, set, unset, update } from "lodash";
-import { ListRemoveAction, State } from "../../types";
+import { ListSwapAction, State } from "../../types";
 
-export const remove = <V>(state: State<V>, action: ListRemoveAction) => {
-  const { path, index } = action.payload;
+export const swap = <V>(state: State<V>, action: ListSwapAction) => {
+  const { path, indexA, indexB } = action.payload;
 
   const [nextValues, patches, inversePatches] = produceWithPatches(
     state.values,
     (draft) => {
       update(draft as any, path, (list) => {
         const updatedList = list || [];
-        if (updatedList.length > 0) {
-          updatedList.splice(index, 1);
-        }
+        const tmp = updatedList[indexA];
+        updatedList[indexA] = updatedList[indexB];
+        updatedList[indexB] = tmp;
         return updatedList;
       });
     }

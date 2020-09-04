@@ -1,19 +1,12 @@
 import { produceWithPatches } from "immer";
-import { set, unset } from "lodash";
-import { ChangeAction, State } from "../types";
+import { State, UndoAction } from "../types";
 import { getDirtyFields } from "../utils";
 
-export const change = <V>(state: State<V>, action: ChangeAction) => {
-  const { name, value } = action.payload;
-
+export const undo = <V>(state: State<V>, action: UndoAction) => {
   const [nextValues, patches, inversePatches] = produceWithPatches(
     state.values,
     (draft) => {
-      if (value === undefined) {
-        unset(draft, name);
-      } else {
-        set(draft as any, name, value);
-      }
+      throw new Error("undo not implemented yet");
     }
   );
   const dirtyFields = getDirtyFields(
