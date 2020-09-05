@@ -2,7 +2,8 @@ name: CI
 on:
   push:
     paths-ignore:
-      - "readme.md"
+      - "README.md"
+      - "docs/**"
     branches:
       - "master"
 jobs:
