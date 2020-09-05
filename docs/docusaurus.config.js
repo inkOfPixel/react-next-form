@@ -1,17 +1,17 @@
 module.exports = {
-  title: "Next Form",
+  title: "React Next Form",
   tagline: "Build complex form with ease",
   url: "https://your-docusaurus-test-site.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   favicon: "img/favicon.ico",
   organizationName: "inkOfPixel", // Usually your GitHub org/user name.
-  projectName: "next-form", // Usually your repo name.
+  projectName: "react-next-form", // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: "Next Form",
+      title: "React Next Form",
       logo: {
-        alt: "My Site Logo",
+        alt: "React Next Form logog",
         src: "img/logo.svg",
       },
       items: [

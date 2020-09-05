@@ -17,7 +17,6 @@ export interface FormContext<V> {
   errors: Record<string, string>;
   fieldProps: (path: FieldPropsOptions | string) => FieldProps;
   submit: () => void;
-  /** Reset to initial values */
   reset: (options?: ResetOptions<V>) => void;
   list: <T>(path: string) => ListField<T>;
   // undo: () => void;
