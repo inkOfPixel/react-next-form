@@ -1,10 +1,16 @@
-# TSDX React User Guide
+# React Form Next
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+React primitives to quickly build complex form behaviors
 
-> This TSDX setup is meant for developing React component libraries (not apps!) that can be published to NPM. If you’re looking to build a React-based app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+<a href="https://www.npmjs.org/package/react-next-form">
+  <img src="https://img.shields.io/npm/v/react-next-form.svg" alt="Current npm package version." />
+</a>
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+## Install
+
+```bash
+yarn add -E react-next-form immer
+```
 
 ## Commands
 
@@ -91,7 +97,7 @@ declare var __DEV__: boolean;
 
 // inside your code...
 if (__DEV__) {
-  console.log('foo');
+  console.log("foo");
 }
 ```
 
