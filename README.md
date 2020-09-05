@@ -14,6 +14,20 @@ yarn add -E react-next-form immer
 
 ## Contribute
 
+### Install dependencies
+
+```bash
+npm install # or yarn
+```
+
+If you are making changes to the documentation site, install docs dependencies:
+
+```bash
+cd docs; npm install # or cd docs; yarn
+```
+
+### Commit messages
+
 Based on the contribution, format your commit message this way so that the version is correctly bumped:
 
 - If the contribution is a breaking change, put `BREAKING CHANGE` or `major` somewhere in your commit.
@@ -26,7 +40,7 @@ In case you might want to skip version bumping just add `[skip ci]` to your comm
 
 To publish a new version to npm, just create a Github release. Once you create the release a Github workflow will take care of the publishing process.
 
-## Commands
+### Commands
 
 The recommended workflow is to run TSDX in one terminal:
 
@@ -40,11 +54,7 @@ To do a one-off build, use `npm run build` or `yarn build`.
 
 To run tests, use `npm test` or `yarn test`.
 
-### Docs
-
-```bash
-npm run docs # or yarn docs
-```
+To run docs use `npm run docs` or `yarn docs`.
 
 ## Optimizations
 
