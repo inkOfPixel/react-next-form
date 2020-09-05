@@ -23,7 +23,7 @@
     "react": ">=16",
     "yup": ">=0.29.3"
   },
-  "name": "next-form",
+  "name": "react-next-form",
   "author": "macs",
   "module": "dist/next-form.esm.js",
   "devDependencies": {
