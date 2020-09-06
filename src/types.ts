@@ -13,7 +13,10 @@ export interface FormContext<V> {
   changes: Patch[];
   dirtyFields: DeepFlagMap;
   touchedFields: DeepFlagMap;
+  status: FormStatus;
   isValidating: boolean;
+  isSubmitting: boolean;
+  submitCount: number;
   errors: Record<string, string>;
   fieldProps: (path: FieldPropsOptions | string) => FieldProps;
   submit: () => void;
@@ -54,6 +57,13 @@ export interface FieldProps {
   checked?: boolean;
 }
 
+export enum FormStatus {
+  Idle = "idle",
+  Submitting = "submitting",
+  Validating = "validating",
+  Submitted = "submitted",
+}
+
 export interface State<V> {
   initialValues: V;
   values: V;
@@ -61,11 +71,12 @@ export interface State<V> {
   inversePatches: Patch[];
   dirtyFields: Record<string, boolean>;
   touchedFields: Record<string, boolean>;
-  isValidating: boolean;
   errors: Record<string, string>;
+  status: FormStatus;
+  submitCount: number;
 }
 
-export enum ActionTypes {
+export enum ActionType {
   CHANGE = "CHANGE",
   BLUR = "BLUR",
   RESET = "RESET",
@@ -101,7 +112,7 @@ export type Action<V> =
   | ValidationErrorsAction;
 
 export interface ChangeAction {
-  type: ActionTypes.CHANGE;
+  type: ActionType.CHANGE;
   payload: {
     name: string;
     value: unknown;
@@ -109,23 +120,23 @@ export interface ChangeAction {
 }
 
 export interface BlurAction {
-  type: ActionTypes.BLUR;
+  type: ActionType.BLUR;
   payload: {
     name: string;
   };
 }
 
 export interface ResetAction<V> {
-  type: ActionTypes.RESET;
+  type: ActionType.RESET;
   options: ResetOptions<V>;
 }
 
 export interface SubmitAction {
-  type: ActionTypes.SUBMIT;
+  type: ActionType.SUBMIT;
 }
 
 export interface ListAppendAction {
-  type: ActionTypes.LIST_APPEND;
+  type: ActionType.LIST_APPEND;
   payload: {
     path: string;
     value: unknown;
@@ -133,7 +144,7 @@ export interface ListAppendAction {
 }
 
 export interface ListSwapAction {
-  type: ActionTypes.LIST_SWAP;
+  type: ActionType.LIST_SWAP;
   payload: {
     path: string;
     indexA: number;
@@ -142,7 +153,7 @@ export interface ListSwapAction {
 }
 
 export interface ListMoveAction {
-  type: ActionTypes.LIST_MOVE;
+  type: ActionType.LIST_MOVE;
   payload: {
     path: string;
     from: number;
@@ -151,7 +162,7 @@ export interface ListMoveAction {
 }
 
 export interface ListInsertAction {
-  type: ActionTypes.LIST_INSERT;
+  type: ActionType.LIST_INSERT;
   payload: {
     path: string;
     index: number;
@@ -160,7 +171,7 @@ export interface ListInsertAction {
 }
 
 export interface ListPrependAction {
-  type: ActionTypes.LIST_PREPEND;
+  type: ActionType.LIST_PREPEND;
   payload: {
     path: string;
     value: unknown;
@@ -168,7 +179,7 @@ export interface ListPrependAction {
 }
 
 export interface ListRemoveAction {
-  type: ActionTypes.LIST_REMOVE;
+  type: ActionType.LIST_REMOVE;
   payload: {
     path: string;
     index: number;
@@ -176,7 +187,7 @@ export interface ListRemoveAction {
 }
 
 export interface ListReplaceAction {
-  type: ActionTypes.LIST_REPLACE;
+  type: ActionType.LIST_REPLACE;
   payload: {
     path: string;
     index: number;
@@ -185,19 +196,19 @@ export interface ListReplaceAction {
 }
 
 export interface UndoAction {
-  type: ActionTypes.UNDO;
+  type: ActionType.UNDO;
 }
 
 export interface RedoAction {
-  type: ActionTypes.REDO;
+  type: ActionType.REDO;
 }
 
 export interface ValidateAction {
-  type: ActionTypes.VALIDATE;
+  type: ActionType.VALIDATE;
 }
 
 export interface ValidationErrorsAction {
-  type: ActionTypes.VALIDATION_ERRORS;
+  type: ActionType.VALIDATION_ERRORS;
   payload: {
     error?: ValidationError;
   };

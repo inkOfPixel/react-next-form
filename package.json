@@ -39,6 +39,7 @@
     "yup": "0.29.3"
   },
   "dependencies": {
+    "@xstate/fsm": "1.5.1",
     "lodash": "4.17.20",
     "lodash-es": "4.17.15"
   }

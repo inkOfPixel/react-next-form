@@ -3,13 +3,14 @@ import React from "react";
 import { reducer } from "./reducers";
 import {
   Action,
-  ActionTypes,
+  ActionType,
   FieldProps,
   FieldPropsOptions,
   FormContext,
   FormOptions,
   ResetOptions,
   State,
+  FormStatus,
 } from "./types";
 import { isEvent, compressPatches, validate } from "./utils";
 import { enablePatches } from "immer";
@@ -28,18 +29,19 @@ export function useForm<V extends Record<string, any> = any>(
     inversePatches: [],
     dirtyFields: {},
     touchedFields: {},
-    isValidating: false,
     errors: {},
+    status: FormStatus.Idle,
+    submitCount: 0,
   });
 
   React.useEffect(() => {
     if (options.validationSchema) {
       dispatch({
-        type: ActionTypes.VALIDATE,
+        type: ActionType.VALIDATE,
       });
       validate(options.validationSchema, state.values, (error) => {
         dispatch({
-          type: ActionTypes.VALIDATION_ERRORS,
+          type: ActionType.VALIDATION_ERRORS,
           payload: {
             error,
           },
@@ -50,13 +52,13 @@ export function useForm<V extends Record<string, any> = any>(
 
   const submit = React.useCallback(() => {
     dispatch({
-      type: ActionTypes.SUBMIT,
+      type: ActionType.SUBMIT,
     });
   }, []);
 
   const reset = React.useCallback((options: ResetOptions<V> = {}) => {
     dispatch({
-      type: ActionTypes.RESET,
+      type: ActionType.RESET,
       options,
     });
   }, []);
@@ -105,7 +107,7 @@ export function useForm<V extends Record<string, any> = any>(
             }
           }
           dispatch({
-            type: ActionTypes.CHANGE,
+            type: ActionType.CHANGE,
             payload: {
               name,
               value: nextValue,
@@ -114,7 +116,7 @@ export function useForm<V extends Record<string, any> = any>(
         },
         onBlur: () =>
           dispatch({
-            type: ActionTypes.BLUR,
+            type: ActionType.BLUR,
             payload: { name },
           }),
       };
@@ -136,37 +138,37 @@ export function useForm<V extends Record<string, any> = any>(
     return {
       append: (value) =>
         dispatch({
-          type: ActionTypes.LIST_APPEND,
+          type: ActionType.LIST_APPEND,
           payload: { path, value },
         }),
       swap: (indexA, indexB) =>
         dispatch({
-          type: ActionTypes.LIST_SWAP,
+          type: ActionType.LIST_SWAP,
           payload: { path, indexA, indexB },
         }),
       move: (from, to) =>
         dispatch({
-          type: ActionTypes.LIST_MOVE,
+          type: ActionType.LIST_MOVE,
           payload: { path, from, to },
         }),
       insert: (index, value) =>
         dispatch({
-          type: ActionTypes.LIST_INSERT,
+          type: ActionType.LIST_INSERT,
           payload: { path, value, index },
         }),
       prepend: (value) =>
         dispatch({
-          type: ActionTypes.LIST_PREPEND,
+          type: ActionType.LIST_PREPEND,
           payload: { path, value },
         }),
       remove: (index) =>
         dispatch({
-          type: ActionTypes.LIST_REMOVE,
+          type: ActionType.LIST_REMOVE,
           payload: { path, index },
         }),
       replace: (index, value) =>
         dispatch({
-          type: ActionTypes.LIST_REPLACE,
+          type: ActionType.LIST_REPLACE,
           payload: { path, value, index },
         }),
     };
@@ -191,8 +193,11 @@ export function useForm<V extends Record<string, any> = any>(
       fieldProps,
       changes,
       list,
-      isValidating: state.isValidating,
       errors: state.errors,
+      status: state.status,
+      isValidating: state.status === FormStatus.Validating,
+      isSubmitting: state.status === FormStatus.Submitting,
+      submitCount: state.submitCount,
     };
   }, [state, submit, fieldProps, list, changes]);
 

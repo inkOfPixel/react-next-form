@@ -1,8 +1,13 @@
 import produce, { Draft } from "immer";
-import { State, ValidateAction, ValidationErrorsAction } from "../types";
+import {
+  State,
+  ValidateAction,
+  ValidationErrorsAction,
+  FormStatus,
+} from "../types";
 
 const validateRecipe = <V>(state: Draft<State<V>>, action: ValidateAction) => {
-  state.isValidating = true;
+  state.status = FormStatus.Validating;
 };
 
 const validationErrorsRecipe = <V>(
@@ -12,7 +17,11 @@ const validationErrorsRecipe = <V>(
   action.payload.error?.inner.forEach((error) => {
     state.errors[error.path] = error.message;
   });
-  state.isValidating = false;
+  if (state.submitCount > 0) {
+    state.status = FormStatus.Submitted;
+  } else {
+    state.status = FormStatus.Idle;
+  }
 };
 
 export const validate = produce(validateRecipe);

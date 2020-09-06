@@ -1,4 +1,4 @@
-import { State, Action, ActionTypes } from "../types";
+import { State, Action, ActionType } from "../types";
 import { reset } from "./reset";
 import { blur } from "./blur";
 import { change } from "./change";
@@ -15,49 +15,49 @@ import { validate, validationErrors } from "./validate";
 
 export function reducer<V>(state: State<V>, action: Action<V>): State<V> {
   switch (action.type) {
-    case ActionTypes.CHANGE: {
+    case ActionType.CHANGE: {
       return change(state, action);
     }
-    case ActionTypes.BLUR: {
+    case ActionType.BLUR: {
       return blur(state, action);
     }
-    case ActionTypes.SUBMIT: {
+    case ActionType.SUBMIT: {
       throw new Error("submit not implemented");
     }
-    case ActionTypes.RESET: {
+    case ActionType.RESET: {
       return reset(state, action);
     }
-    case ActionTypes.LIST_APPEND: {
+    case ActionType.LIST_APPEND: {
       return append(state, action);
     }
-    case ActionTypes.LIST_SWAP: {
+    case ActionType.LIST_SWAP: {
       return swap(state, action);
     }
-    case ActionTypes.LIST_MOVE: {
+    case ActionType.LIST_MOVE: {
       return move(state, action);
     }
-    case ActionTypes.LIST_INSERT: {
+    case ActionType.LIST_INSERT: {
       return insert(state, action);
     }
-    case ActionTypes.LIST_PREPEND: {
+    case ActionType.LIST_PREPEND: {
       return prepend(state, action);
     }
-    case ActionTypes.LIST_REMOVE: {
+    case ActionType.LIST_REMOVE: {
       return remove(state, action);
     }
-    case ActionTypes.LIST_REPLACE: {
+    case ActionType.LIST_REPLACE: {
       return replace(state, action);
     }
-    case ActionTypes.UNDO: {
+    case ActionType.UNDO: {
       return undo(state, action);
     }
-    case ActionTypes.REDO: {
+    case ActionType.REDO: {
       return redo(state, action);
     }
-    case ActionTypes.VALIDATE: {
+    case ActionType.VALIDATE: {
       return validate(state, action);
     }
-    case ActionTypes.VALIDATION_ERRORS: {
+    case ActionType.VALIDATION_ERRORS: {
       return validationErrors(state, action);
     }
     default:
