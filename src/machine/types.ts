@@ -54,11 +54,13 @@ export interface ValidationErrorEvent {
 
 export interface ResetEvent<Values> {
   type: EventType.Reset;
-  payload: {
-    newInitialValues?: Values;
-    keepDirtyFields?: boolean;
-    keepTouchedStatus?: boolean;
-  };
+  payload: ResetOptions<Values>;
+}
+
+export interface ResetOptions<Values> {
+  newInitialValues?: Values;
+  keepDirtyFields?: boolean;
+  keepTouchedStatus?: boolean;
 }
 
 export interface FieldTouchedEvent {
@@ -70,7 +72,6 @@ export interface FieldTouchedEvent {
 
 export interface SubmitEvent {
   type: EventType.Submit;
-  payload: {};
 }
 
 export interface SubmitSuccessEvent<SubmissionResult> {
@@ -121,7 +122,7 @@ export interface SetPayload {
 
 export interface ListAppendPayload {
   type: ChangeType.ListAppend;
-  path: string;
+  fieldPath: string;
   value: unknown;
 }
 
@@ -165,7 +166,7 @@ export interface ListReplacePayload {
   value: unknown;
 }
 
-export enum FormState {
+export enum FormStatus {
   Validate = "validate",
   Valid = "valid",
   NotValid = "notValid",
