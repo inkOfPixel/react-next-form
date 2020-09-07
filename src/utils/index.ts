@@ -1,7 +1,7 @@
 import produce, { Draft, Patch, produceWithPatches, applyPatches } from "immer";
 import { isEqual, get, unset, set } from "lodash";
-import { DeepFlagMap } from "../types";
 import { Schema, ValidationError } from "yup";
+import { DeepFlagMap, MachineContext } from "../machine/types";
 
 export function isEvent(
   obj: unknown
@@ -9,15 +9,21 @@ export function isEvent(
   return typeof obj === "object" && (obj as any)?.nativeEvent instanceof Event;
 }
 
-export const getDirtyFields = produce(
-  <V>(dirtyFieldsDraft: Draft<DeepFlagMap>, values: V, initialValues: V) => {
-    if (isEqual(get(values, name), get(initialValues, name))) {
-      unset(dirtyFieldsDraft, name);
+export const getDirtyFields = <Values, SubmissionResult>(
+  context: MachineContext<Values, SubmissionResult>,
+  fieldPath: string,
+  nextValues: Values
+) => {
+  return produce(context.dirtyFields, (draft) => {
+    if (
+      isEqual(get(nextValues, fieldPath), get(context.initialValues, fieldPath))
+    ) {
+      unset(draft, fieldPath);
     } else {
-      set(dirtyFieldsDraft, name, true);
+      set(draft, fieldPath, true);
     }
-  }
-);
+  });
+};
 
 export function compressPatches<V>(initialValues: V, currentPatches: Patch[]) {
   const [_, patches] = produceWithPatches(initialValues, (draft) => {
@@ -41,3 +47,7 @@ export const validate = async <V>(
     onDone(error);
   }
 };
+
+export function assertNever(x: never): never {
+  throw new Error("Unexpected action: " + x);
+}
