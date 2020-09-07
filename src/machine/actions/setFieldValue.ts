@@ -19,11 +19,9 @@ export const setFieldValue = <Values, SubmissionResult>(
       }
     }
   );
-  const dirtyFields = getDirtyFields(
-    context.dirtyFields,
-    nextValues,
-    context.initialValues
-  );
+
+  const dirtyFields = getDirtyFields(context, fieldPath, nextValues);
+
   return {
     ...context,
     values: nextValues,

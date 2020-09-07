@@ -1,83 +1,151 @@
-import { get } from "lodash";
 import React from "react";
-import { reducer } from "./reducers";
-import {
-  Action,
-  ActionType,
-  FieldProps,
-  FieldPropsOptions,
-  FormContext,
-  FormOptions,
-  ResetOptions,
-  State,
-  FormStatus,
-} from "./types";
-import { isEvent, compressPatches, validate } from "./utils";
 import { enablePatches } from "immer";
+import { createFormMachine } from "./machine";
+import { useMachine } from "./utils/useMachine";
+import { FormStatus, EventType, ChangeType } from "./machine/types";
+import { compressPatches, isEvent, validate } from "./utils";
+import {
+  FieldPropsOptions,
+  FieldProps,
+  FormOptions,
+  FormContext,
+  ResetOptions,
+} from "./types";
+import { get } from "lodash";
 
 enablePatches();
 
-export function useForm<V extends Record<string, any> = any>(
-  options: FormOptions<V>
-): FormContext<V> {
-  const [state, dispatch] = React.useReducer<
-    React.Reducer<State<V>, Action<V>>
-  >(reducer, {
-    initialValues: options.initialValues,
-    values: options.initialValues,
-    patches: [],
-    inversePatches: [],
-    dirtyFields: {},
-    touchedFields: {},
-    errors: {},
-    status: FormStatus.Idle,
-    submitCount: 0,
+export function useForm<
+  Values extends Record<string, any> = any,
+  SubmissionResult = any
+>(
+  options: FormOptions<Values, SubmissionResult>
+): FormContext<Values, SubmissionResult> {
+  const [state, send] = useMachine(() => {
+    return createFormMachine<Values, SubmissionResult>({
+      initialValues: options.initialValues,
+      values: options.initialValues,
+      validationErrors: {},
+      submission: {
+        result: undefined,
+        error: undefined,
+        count: 0,
+      },
+      patches: [],
+      inversePatches: [],
+      dirtyFields: {},
+      touchedFields: {},
+    });
   });
 
+  const changes = React.useMemo(() => {
+    const compressedPatches = compressPatches(
+      state.context.initialValues,
+      state.context.patches
+    );
+    return compressedPatches;
+  }, [state]);
+
+  /** Handles callbacks on status changes, like validation and onSubmit */
   React.useEffect(() => {
-    if (options.validationSchema) {
-      dispatch({
-        type: ActionType.VALIDATE,
-      });
-      validate(options.validationSchema, state.values, (error) => {
-        dispatch({
-          type: ActionType.VALIDATION_ERRORS,
-          payload: {
-            error,
+    switch (state.value) {
+      case FormStatus.Validate: {
+        if (options.validationSchema) {
+          validate(options.validationSchema, state.context.values, (error) => {
+            if (error) {
+              send({
+                type: EventType.ValidationError,
+                payload: {
+                  error,
+                },
+              });
+            } else {
+              send({
+                type: EventType.ValidationSuccess,
+              });
+            }
+          });
+        } else {
+          // @TODO: handle missing validation schema: form is always valid
+        }
+        break;
+      }
+      case FormStatus.Submit: {
+        options
+          .onSubmit(state.context.values, {
+            initialValues: state.context.initialValues,
+            changes,
+          })
+          .then((result) => {
+            send({
+              type: EventType.SubmissionSuccess,
+              payload: {
+                result,
+              },
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            send({
+              type: EventType.SubmissionError,
+              payload: {
+                error: error.message,
+              },
+            });
+          });
+        break;
+      }
+      default:
+        break;
+    }
+  }, [state.context, changes, options]);
+
+  React.useEffect(() => {
+    if (options.enableReinitialize) {
+      send({
+        type: EventType.Reset,
+        payload: {
+          values: options.initialValues,
+          options: {
+            keepDirtyFields: true,
+            keepTouchedStatus: true,
           },
-        });
+        },
       });
     }
-  }, [state.values]);
+  }, [options.initialValues]);
 
-  const submit = React.useCallback(() => {
-    dispatch({
-      type: ActionType.SUBMIT,
+  const submit = React.useCallback(async () => {
+    send({
+      type: EventType.Submit,
     });
-  }, []);
+  }, [state.context]);
 
-  const reset = React.useCallback((options: ResetOptions<V> = {}) => {
-    dispatch({
-      type: ActionType.RESET,
-      options,
-    });
-  }, []);
+  const reset = React.useCallback(
+    (values?: Values, options: ResetOptions = {}) => {
+      send({
+        type: EventType.Reset,
+        payload: { values, options },
+      });
+    },
+    []
+  );
 
   const fieldProps = React.useCallback(
     (options: FieldPropsOptions | string): FieldProps => {
-      let name: string;
+      let fieldPath: string;
       let type: string | undefined;
       let value: string | number | undefined;
       if (typeof options === "string") {
-        name = options;
+        fieldPath = options;
       } else {
-        name = options.name;
+        fieldPath = options.name;
         type = options.type;
         value = options.value;
       }
-      const stateValue = get(state.values, name);
+      const stateValue = get(state.context.values, fieldPath);
       const props: FieldProps = {
-        name,
+        name: fieldPath,
         onChange: (x: React.ChangeEvent<HTMLInputElement> | unknown) => {
           let nextValue: unknown;
           if (isEvent(x)) {
@@ -106,18 +174,19 @@ export function useForm<V extends Record<string, any> = any>(
               }
             }
           }
-          dispatch({
-            type: ActionType.CHANGE,
+          send({
+            type: EventType.Change,
             payload: {
-              name,
+              type: ChangeType.Set,
+              fieldPath: fieldPath,
               value: nextValue,
             },
           });
         },
         onBlur: () =>
-          dispatch({
-            type: ActionType.BLUR,
-            payload: { name },
+          send({
+            type: EventType.FieldTouched,
+            payload: { fieldPath: fieldPath },
           }),
       };
       if (type === "checkbox" || typeof stateValue === "boolean") {
@@ -131,73 +200,68 @@ export function useForm<V extends Record<string, any> = any>(
       }
       return props;
     },
-    [state.values]
+    [state.context.values]
   );
 
-  const list = React.useCallback<FormContext<V>["list"]>((path) => {
-    return {
-      append: (value) =>
-        dispatch({
-          type: ActionType.LIST_APPEND,
-          payload: { path, value },
-        }),
-      swap: (indexA, indexB) =>
-        dispatch({
-          type: ActionType.LIST_SWAP,
-          payload: { path, indexA, indexB },
-        }),
-      move: (from, to) =>
-        dispatch({
-          type: ActionType.LIST_MOVE,
-          payload: { path, from, to },
-        }),
-      insert: (index, value) =>
-        dispatch({
-          type: ActionType.LIST_INSERT,
-          payload: { path, value, index },
-        }),
-      prepend: (value) =>
-        dispatch({
-          type: ActionType.LIST_PREPEND,
-          payload: { path, value },
-        }),
-      remove: (index) =>
-        dispatch({
-          type: ActionType.LIST_REMOVE,
-          payload: { path, index },
-        }),
-      replace: (index, value) =>
-        dispatch({
-          type: ActionType.LIST_REPLACE,
-          payload: { path, value, index },
-        }),
-    };
-  }, []);
+  const list = React.useCallback<FormContext<Values, SubmissionResult>["list"]>(
+    (fieldPath) => {
+      return {
+        append: (value) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListAppend, fieldPath, value },
+          }),
+        swap: (indexA, indexB) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListSwap, fieldPath, indexA, indexB },
+          }),
+        move: (from, to) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListMove, fieldPath, from, to },
+          }),
+        insert: (index, value) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListInsert, fieldPath, value, index },
+          }),
+        prepend: (value) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListPrepend, fieldPath, value },
+          }),
+        remove: (index) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListRemove, fieldPath, index },
+          }),
+        replace: (index, value) =>
+          send({
+            type: EventType.Change,
+            payload: { type: ChangeType.ListReplace, fieldPath, value, index },
+          }),
+      };
+    },
+    []
+  );
 
-  const changes = React.useMemo(() => {
-    const compressedPatches = compressPatches(
-      state.initialValues,
-      state.patches
-    );
-    return compressedPatches;
-  }, [state]);
-
-  const form = React.useMemo<FormContext<V>>(() => {
+  const form = React.useMemo<FormContext<Values, SubmissionResult>>(() => {
     return {
-      initialValues: state.initialValues,
-      values: state.values,
-      dirtyFields: state.dirtyFields,
-      touchedFields: state.touchedFields,
+      initialValues: state.context.initialValues,
+      values: state.context.values,
+      dirtyFields: state.context.dirtyFields,
+      touchedFields: state.context.touchedFields,
       submit,
       reset,
       fieldProps,
       changes,
       list,
-      errors: state.errors,
-      status: state.status,
-      isValidating: state.status === FormStatus.Validating,
-      isSubmitting: state.status === FormStatus.Submitting,
-      submitCount: state.submitCount,
+      validationErrors: state.context.validationErrors,
+      status: state.value,
+      isValidating: state.value === FormStatus.Validate,
+      isSubmitting: state.value === FormStatus.Submit,
+      submission: state.context.submission,
     };
   }, [state, submit, fieldProps, list, changes]);
 

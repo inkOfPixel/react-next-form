@@ -5,8 +5,9 @@ import { createMachine } from "@xstate/fsm";
 import { setFieldTouched } from "./actions/setFieldTouched";
 import { setValues } from "./actions/setValues";
 import { setValidationErrors } from "./actions/setValidationErrors";
+import { setSubmissionError } from "./actions/setSubmissionError";
 import { clearValidationErrors } from "./actions/clearValidationErrors";
-import { reset } from "./actions/reset";
+import { resetValues } from "./actions/resetValues";
 import { MachineContext, MachineEvent } from "./types";
 
 export function createFormMachine<Values, SubmissionResult>(
@@ -133,7 +134,8 @@ export function createFormMachine<Values, SubmissionResult>(
         setFieldTouched,
         setValidationErrors,
         clearValidationErrors,
-        reset,
+        resetValues,
+        setSubmissionError,
       },
     }
   );

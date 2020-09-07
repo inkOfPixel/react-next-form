@@ -1,5 +1,6 @@
 import { Patch } from "immer";
 import { ValidationError } from "yup";
+import { ResetOptions } from "../types";
 
 export interface MachineContext<Values, SubmissionResult = unknown> {
   initialValues: Values;
@@ -54,13 +55,7 @@ export interface ValidationErrorEvent {
 
 export interface ResetEvent<Values> {
   type: EventType.Reset;
-  payload: ResetOptions<Values>;
-}
-
-export interface ResetOptions<Values> {
-  newInitialValues?: Values;
-  keepDirtyFields?: boolean;
-  keepTouchedStatus?: boolean;
+  payload: { values?: Values; options: ResetOptions };
 }
 
 export interface FieldTouchedEvent {
