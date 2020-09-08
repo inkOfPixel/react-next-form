@@ -33,10 +33,11 @@ interface ExampleValues {
 }
 
 export default function Example() {
-  const [initialValues, setInitialValues] = React.useState<ExampleValues>({
-    email: "",
-    name: "",
-  });
+  // const [initialValues, setInitialValues] = React.useState<ExampleValues>({
+  //   email: "",
+  //   name: "",
+  // });
+  const [initialValues, setInitialValues] = React.useState<ExampleValues>();
   const form = useForm<ExampleValues>({
     initialValues,
     enableReinitialize: true,

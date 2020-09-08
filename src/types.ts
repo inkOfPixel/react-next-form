@@ -2,7 +2,10 @@ import { Patch } from "immer";
 import { Schema } from "yup";
 import { DeepFlagMap, FormStatus } from "./machine/types";
 
-export interface FormOptions<Values, SubmissionResult> {
+export interface FormOptions<
+  Values extends Record<string, any>,
+  SubmissionResult = any
+> {
   initialValues: Values;
   enableReinitialize?: boolean;
   reinitializeOptions?: ResetOptions;
@@ -13,7 +16,10 @@ export interface FormOptions<Values, SubmissionResult> {
   validationSchema?: Schema<Values>;
 }
 
-export interface FormContext<Values, SubmissionResult> {
+export interface FormContext<
+  Values extends Record<string, any>,
+  SubmissionResult = any
+> {
   initialValues: Values;
   values: Values;
   validationErrors: Record<string, FieldError>;

@@ -17,8 +17,8 @@ export function useForm<
 ): FormContext<Values, SubmissionResult> {
   const [state, send] = useMachine(() => {
     return createFormMachine<Values, SubmissionResult>({
-      initialValues: options.initialValues,
-      values: options.initialValues,
+      initialValues: options.initialValues || {},
+      values: options.initialValues || {},
       validationErrors: {},
       submission: {
         result: undefined,
