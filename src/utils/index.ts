@@ -1,7 +1,7 @@
-import produce, { Draft, Patch, produceWithPatches, applyPatches } from "immer";
-import { isEqual, get, unset, set } from "lodash";
+import produce, { applyPatches, Patch, produceWithPatches } from "immer";
+import { get, isEqual, set, unset } from "lodash";
 import { Schema, ValidationError } from "yup";
-import { DeepFlagMap, MachineContext } from "../machine/types";
+import { MachineContext } from "../machine/types";
 
 export function isEvent(
   obj: unknown
@@ -29,7 +29,7 @@ export function compressPatches<V>(initialValues: V, currentPatches: Patch[]) {
   const [_, patches] = produceWithPatches(initialValues, (draft) => {
     return applyPatches(draft, currentPatches);
   });
-  return patches;
+  return patches || [];
 }
 
 export const validate = async <V>(
