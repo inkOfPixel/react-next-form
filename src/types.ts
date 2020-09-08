@@ -35,7 +35,7 @@ export interface FormContext<Values, SubmissionResult> {
     fieldPath: string,
     newValue: FieldValue
   ) => void;
-  setFieldTouched: (fieldPath: string, touched: boolean) => void;
+  setFieldTouched: (fieldPath: string, touched?: boolean) => void;
   resetField: (fieldPath: string) => void;
   isTouched(fieldPath: string): boolean;
   isDirty(fieldPath: string): boolean;
@@ -46,18 +46,18 @@ export interface FormContext<Values, SubmissionResult> {
   // redo: () => void;
 }
 
-export interface Field<FieldValue> {
+export interface Field<FieldValue = any> {
   initialValue: FieldValue;
   value: FieldValue;
   setValue: (newValue: FieldValue) => void;
-  setTouched: (touched: boolean) => void;
+  setTouched: (touched?: boolean) => void;
   reset: () => void;
   isTouched: boolean;
   isDirty: boolean;
   props: FieldProps;
 }
 
-export interface ListField<ItemValue> {
+export interface ListField<ItemValue = any> {
   initialValue?: ItemValue[];
   value?: ItemValue[];
   append: (value: ItemValue) => void;
@@ -69,7 +69,7 @@ export interface ListField<ItemValue> {
   replace: (index: number, value: ItemValue) => void;
 }
 
-export interface FieldPropsOptions<FieldValue> {
+export interface FieldPropsOptions<FieldValue = any> {
   name: string;
   type?: string;
   /** Used for checkboxes */

@@ -220,7 +220,7 @@ export function useForm<
 
   const setFieldTouched = React.useCallback<
     FormContext<Values, SubmissionResult>["setFieldTouched"]
-  >((fieldPath, touched) => {
+  >((fieldPath, touched = true) => {
     send({
       type: EventType.FieldTouched,
       payload: { fieldPath, touched },
