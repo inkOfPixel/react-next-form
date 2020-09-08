@@ -28,15 +28,38 @@ export interface FormContext<Values, SubmissionResult> {
     error?: string;
     count: number;
   };
-  fieldProps: (path: FieldPropsOptions | string) => FieldProps;
+  fieldProps: <FieldValue = any>(
+    options: FieldPropsOptions<FieldValue> | string
+  ) => FieldProps;
+  setFieldValue: <FieldValue = any>(
+    fieldPath: string,
+    newValue: FieldValue
+  ) => void;
+  setFieldTouched: (fieldPath: string, touched: boolean) => void;
+  resetField: (fieldPath: string) => void;
+  isTouched(fieldPath: string): boolean;
+  isDirty(fieldPath: string): boolean;
+  list: <T>(fieldPath: string) => ListField<T>;
   submit: () => void;
   reset: (values?: Values, options?: ResetOptions) => void;
-  list: <T>(path: string) => ListField<T>;
   // undo: () => void;
   // redo: () => void;
 }
 
+export interface Field<FieldValue> {
+  initialValue: FieldValue;
+  value: FieldValue;
+  setValue: (newValue: FieldValue) => void;
+  setTouched: (touched: boolean) => void;
+  reset: () => void;
+  isTouched: boolean;
+  isDirty: boolean;
+  props: FieldProps;
+}
+
 export interface ListField<ItemValue> {
+  initialValue?: ItemValue[];
+  value?: ItemValue[];
   append: (value: ItemValue) => void;
   swap: (indexA: number, indexB: number) => void;
   move: (from: number, to: number) => void;
@@ -46,11 +69,11 @@ export interface ListField<ItemValue> {
   replace: (index: number, value: ItemValue) => void;
 }
 
-export interface FieldPropsOptions {
+export interface FieldPropsOptions<FieldValue> {
   name: string;
   type?: string;
   /** Used for checkboxes */
-  value?: string | number;
+  value?: FieldValue;
 }
 
 export interface FieldProps {

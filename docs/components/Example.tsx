@@ -70,6 +70,22 @@ export default function Example() {
                   Reset
                 </Button>
                 <Button
+                  colorScheme="gray"
+                  onClick={() => {
+                    form.resetField("email");
+                  }}
+                >
+                  Reset email
+                </Button>
+                <Button
+                  colorScheme="gray"
+                  onClick={() => {
+                    form.setFieldTouched("addresses[0].street", false);
+                  }}
+                >
+                  Reset touched address
+                </Button>
+                <Button
                   colorScheme="blue"
                   onClick={() => {
                     form.submit();

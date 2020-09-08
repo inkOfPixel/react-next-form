@@ -11,7 +11,7 @@ import {
   FormContext,
   ResetOptions,
 } from "./types";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 
 enablePatches();
 
@@ -131,11 +131,13 @@ export function useForm<
     []
   );
 
-  const fieldProps = React.useCallback(
-    (options: FieldPropsOptions | string): FieldProps => {
+  const fieldProps = React.useCallback<
+    FormContext<Values, SubmissionResult>["fieldProps"]
+  >(
+    (options) => {
       let fieldPath: string;
       let type: string | undefined;
-      let value: string | number | undefined;
+      let value: any;
       if (typeof options === "string") {
         fieldPath = options;
       } else {
@@ -186,7 +188,7 @@ export function useForm<
         onBlur: () =>
           send({
             type: EventType.FieldTouched,
-            payload: { fieldPath: fieldPath },
+            payload: { fieldPath: fieldPath, touched: true },
           }),
       };
       if (type === "checkbox" || typeof stateValue === "boolean") {
@@ -201,6 +203,62 @@ export function useForm<
       return props;
     },
     [state.context.values]
+  );
+
+  const setFieldValue = React.useCallback<
+    FormContext<Values, SubmissionResult>["setFieldValue"]
+  >((fieldPath, newValue) => {
+    send({
+      type: EventType.Change,
+      payload: {
+        type: ChangeType.Set,
+        fieldPath,
+        value: newValue,
+      },
+    });
+  }, []);
+
+  const setFieldTouched = React.useCallback<
+    FormContext<Values, SubmissionResult>["setFieldTouched"]
+  >((fieldPath, touched) => {
+    send({
+      type: EventType.FieldTouched,
+      payload: { fieldPath, touched },
+    });
+  }, []);
+
+  const resetField = React.useCallback<
+    FormContext<Values, SubmissionResult>["resetField"]
+  >((fieldPath) => {
+    const initialValue = get(state.context.initialValues, fieldPath);
+    send({
+      type: EventType.Change,
+      payload: {
+        type: ChangeType.Set,
+        fieldPath,
+        value: initialValue,
+      },
+    });
+  }, []);
+
+  const isTouched = React.useCallback<
+    FormContext<Values, SubmissionResult>["isTouched"]
+  >(
+    (fieldPath) => {
+      const touched = get(state.context.touchedFields, fieldPath);
+      return touched != null && touched !== false;
+    },
+    [state.context.touchedFields]
+  );
+
+  const isDirty = React.useCallback<
+    FormContext<Values, SubmissionResult>["isDirty"]
+  >(
+    (fieldPath) => {
+      const dirty = get(state.context.dirtyFields, fieldPath);
+      return dirty != null && dirty !== false;
+    },
+    [state.context.dirtyFields]
   );
 
   const list = React.useCallback<FormContext<Values, SubmissionResult>["list"]>(
@@ -255,6 +313,11 @@ export function useForm<
       submit,
       reset,
       fieldProps,
+      setFieldValue,
+      setFieldTouched,
+      resetField,
+      isTouched,
+      isDirty,
       changes,
       list,
       validationErrors: state.context.validationErrors,

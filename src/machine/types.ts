@@ -62,6 +62,7 @@ export interface FieldTouchedEvent {
   type: EventType.FieldTouched;
   payload: {
     fieldPath: string;
+    touched: boolean;
   };
 }
 
