@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import React from "react";
 import { useFormContext } from "./FormContext";
-import { Field, FieldPropsOptions } from "./types";
+import { Field, FieldPropsOptions, FieldError } from "./types";
 
 export function useField<Value = any>(
   options: string | FieldPropsOptions<Value>
@@ -16,6 +16,10 @@ export function useField<Value = any>(
   const value = React.useMemo<Value>(() => {
     return get(state.values, fieldPath);
   }, [fieldPath, state.values]);
+
+  const error = React.useMemo<FieldError>(() => {
+    return state.validationErrors[fieldPath];
+  }, [fieldPath, state.validationErrors]);
 
   const setValue = React.useCallback<Field<Value>["setValue"]>(
     (newValue) => {
@@ -50,6 +54,7 @@ export function useField<Value = any>(
   return {
     value,
     initialValue,
+    error,
     setValue,
     setTouched,
     reset,

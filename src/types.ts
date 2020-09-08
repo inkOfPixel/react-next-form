@@ -16,7 +16,7 @@ export interface FormOptions<Values, SubmissionResult> {
 export interface FormContext<Values, SubmissionResult> {
   initialValues: Values;
   values: Values;
-  validationErrors: Record<string, string>;
+  validationErrors: Record<string, FieldError>;
   changes: Patch[];
   dirtyFields: DeepFlagMap;
   touchedFields: DeepFlagMap;
@@ -49,6 +49,7 @@ export interface FormContext<Values, SubmissionResult> {
 export interface Field<FieldValue = any> {
   initialValue: FieldValue;
   value: FieldValue;
+  error?: FieldError;
   setValue: (newValue: FieldValue) => void;
   setTouched: (touched?: boolean) => void;
   reset: () => void;
@@ -95,3 +96,5 @@ export interface SubmissionContext<Values> {
   initialValues: Values;
   changes: Patch[];
 }
+
+export type FieldError = string;
