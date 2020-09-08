@@ -3,7 +3,7 @@ import React from "react";
 import { useFormContext } from "./FormContext";
 import { Field, FieldPropsOptions } from "./types";
 
-export function useField<Value>(
+export function useField<Value = any>(
   options: string | FieldPropsOptions<Value>
 ): Field<Value> {
   const state = useFormContext();
