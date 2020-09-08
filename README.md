@@ -2,9 +2,8 @@
 
 React primitives to quickly build complex form behaviors
 
-<a href="https://www.npmjs.org/package/react-next-form">
-  <img src="https://img.shields.io/npm/v/react-next-form.svg" alt="Current npm package version." />
-</a>
+![npm](https://img.shields.io/npm/v/react-next-form)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-next-form)
 
 ## Install
 
