@@ -1,17 +1,11 @@
-import React from "react";
 import { enablePatches } from "immer";
+import { get } from "lodash";
+import React from "react";
 import { createFormMachine } from "./machine";
-import { useMachine } from "./utils/useMachine";
-import { FormStatus, EventType, ChangeType } from "./machine/types";
+import { ChangeType, EventType, FormStatus } from "./machine/types";
+import { FieldProps, FormContext, FormOptions, ResetOptions } from "./types";
 import { compressPatches, isEvent, validate } from "./utils";
-import {
-  FieldPropsOptions,
-  FieldProps,
-  FormOptions,
-  FormContext,
-  ResetOptions,
-} from "./types";
-import { get, isEqual } from "lodash";
+import { useMachine } from "./utils/useMachine";
 
 enablePatches();
 
@@ -115,7 +109,7 @@ export function useForm<
     }
   }, [options.initialValues]);
 
-  const submit = React.useCallback(async () => {
+  const submit = React.useCallback(() => {
     send({
       type: EventType.Submit,
     });
