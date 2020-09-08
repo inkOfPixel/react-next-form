@@ -44,7 +44,7 @@ export function useForm<
       state.context.patches
     );
     return compressedPatches;
-  }, [state]);
+  }, [state.context.initialValues, state.context.patches]);
 
   /** Handles callbacks on status changes, like validation and onSubmit */
   React.useEffect(() => {
@@ -119,7 +119,7 @@ export function useForm<
     send({
       type: EventType.Submit,
     });
-  }, [state.context]);
+  }, []);
 
   const reset = React.useCallback(
     (values?: Values, options: ResetOptions = {}) => {
@@ -326,7 +326,19 @@ export function useForm<
       isSubmitting: state.value === FormStatus.Submit,
       submission: state.context.submission,
     };
-  }, [state, submit, fieldProps, list, changes]);
+  }, [
+    state.context,
+    state.value,
+    submit,
+    fieldProps,
+    list,
+    changes,
+    setFieldValue,
+    setFieldTouched,
+    resetField,
+    isTouched,
+    isDirty,
+  ]);
 
   return form;
 }
