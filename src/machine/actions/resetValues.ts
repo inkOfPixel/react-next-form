@@ -1,6 +1,7 @@
 import { assign } from "@xstate/fsm";
 import produce, { Draft, applyPatches, castDraft } from "immer";
 import { MachineContext, MachineEvent, EventType } from "../types";
+import { isEqual } from "lodash";
 
 function resetValuesRecipe<Values, SubmissionResult>(
   context: Draft<MachineContext<Values, SubmissionResult>>,
@@ -11,28 +12,39 @@ function resetValuesRecipe<Values, SubmissionResult>(
     const { keepDirtyFields = false, keepTouchedStatus = false } = options;
 
     if (newInitialValues) {
-      let nextValues = newInitialValues;
-      if (keepDirtyFields) {
-        nextValues = applyPatches(newInitialValues, context.patches);
+      if (isEqual(newInitialValues, context.initialValues)) {
+        if (
+          !keepDirtyFields &&
+          !isEqual(context.initialValues, context.values)
+        ) {
+          context.values = context.initialValues;
+          context.dirtyFields = {};
+          context.patches = [];
+          context.inversePatches = [];
+        }
+      } else {
+        let nextValues = newInitialValues;
+        if (keepDirtyFields) {
+          nextValues = applyPatches(newInitialValues, context.patches);
+        }
+        context.initialValues = castDraft(newInitialValues);
+        context.values = castDraft(nextValues);
+        if (!keepDirtyFields) {
+          context.dirtyFields = {};
+          context.patches = [];
+          context.inversePatches = [];
+        }
       }
-      context.initialValues = castDraft(newInitialValues);
-      context.values = castDraft(nextValues);
+    } else {
       if (!keepDirtyFields) {
+        context.values = context.initialValues;
         context.dirtyFields = {};
         context.patches = [];
         context.inversePatches = [];
       }
-      if (!keepTouchedStatus) {
-        context.touchedFields = {};
-      }
-    } else {
-      context.values = context.initialValues;
-      context.dirtyFields = {};
-      if (!keepTouchedStatus) {
-        context.touchedFields = {};
-      }
-      context.patches = [];
-      context.inversePatches = [];
+    }
+    if (!keepTouchedStatus) {
+      context.touchedFields = {};
     }
   } else if (event.type === EventType.SubmissionSuccess) {
     context.initialValues = context.values;
