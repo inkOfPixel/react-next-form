@@ -1,4 +1,4 @@
-# React Form Next
+# React Next Form
 
 React primitives to quickly build complex form behaviors
 
