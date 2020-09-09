@@ -18,7 +18,6 @@ function resetValuesRecipe<Values, SubmissionResult>(
           !isEqual(context.initialValues, context.values)
         ) {
           context.values = context.initialValues;
-          context.dirtyFields = {};
           context.patches = [];
           context.inversePatches = [];
         }
@@ -30,7 +29,6 @@ function resetValuesRecipe<Values, SubmissionResult>(
         context.initialValues = castDraft(newInitialValues);
         context.values = castDraft(nextValues);
         if (!keepDirtyFields) {
-          context.dirtyFields = {};
           context.patches = [];
           context.inversePatches = [];
         }
@@ -38,7 +36,6 @@ function resetValuesRecipe<Values, SubmissionResult>(
     } else {
       if (!keepDirtyFields) {
         context.values = context.initialValues;
-        context.dirtyFields = {};
         context.patches = [];
         context.inversePatches = [];
       }
@@ -48,7 +45,6 @@ function resetValuesRecipe<Values, SubmissionResult>(
     }
   } else if (event.type === EventType.SubmissionSuccess) {
     context.initialValues = context.values;
-    context.dirtyFields = {};
     context.touchedFields = {};
     context.patches = [];
     context.inversePatches = [];

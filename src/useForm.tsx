@@ -27,7 +27,6 @@ export function useForm<
       },
       patches: [],
       inversePatches: [],
-      dirtyFields: {},
       touchedFields: {},
     });
   });

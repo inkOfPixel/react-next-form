@@ -1,6 +1,5 @@
 import { produceWithPatches } from "immer";
 import { update } from "lodash";
-import { getDirtyFields } from "../../../utils";
 import { ListMovePayload, MachineContext } from "../../types";
 
 export const move = <Values, SubmissionResult>(
@@ -24,12 +23,9 @@ export const move = <Values, SubmissionResult>(
     }
   );
 
-  const dirtyFields = getDirtyFields(context, fieldPath, nextValues);
-
   return {
     ...context,
     values: nextValues,
-    dirtyFields,
     patches: context.patches.concat(patches),
     inversePatches: context.inversePatches.concat(inversePatches),
   };

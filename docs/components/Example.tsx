@@ -211,16 +211,6 @@ export default function Example() {
               </Stack>
               <Stack direction="column">
                 <Text fontSize="xl" fontWeight="medium">
-                  form.dirtyFields
-                </Text>
-                <ReactJson
-                  name="dirtyFields"
-                  src={form.dirtyFields}
-                  collapsed
-                />
-              </Stack>
-              <Stack direction="column">
-                <Text fontSize="xl" fontWeight="medium">
                   form.touchedFields
                 </Text>
                 <ReactJson

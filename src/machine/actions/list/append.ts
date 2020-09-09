@@ -1,6 +1,5 @@
 import { produceWithPatches } from "immer";
-import { update, get } from "lodash";
-import { getDirtyFields } from "../../../utils";
+import { update } from "lodash";
 import { ListAppendPayload, MachineContext } from "../../types";
 
 export const append = <Values, SubmissionResult>(
@@ -20,16 +19,9 @@ export const append = <Values, SubmissionResult>(
     }
   );
 
-  const field = get(nextValues, fieldPath);
-
-  const itemFieldPath = `${fieldPath}[${field.length - 1}]`;
-
-  const dirtyFields = getDirtyFields(context, itemFieldPath, nextValues);
-
   return {
     ...context,
     values: nextValues,
-    dirtyFields,
     patches: context.patches.concat(patches),
     inversePatches: context.inversePatches.concat(inversePatches),
   };

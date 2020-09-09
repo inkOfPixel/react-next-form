@@ -13,7 +13,6 @@ export interface MachineContext<Values, SubmissionResult = unknown> {
   };
   patches: Patch[];
   inversePatches: Patch[];
-  dirtyFields: DeepFlagMap;
   touchedFields: DeepFlagMap;
 }
 
