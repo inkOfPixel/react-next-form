@@ -37,37 +37,37 @@ export function useArrayField<ItemValue = any>(
 
   const append = React.useCallback<ArrayField<ItemValue>["append"]>(
     (value) => form.append(fieldPath, value),
-    []
+    [form.append]
   );
 
   const swap = React.useCallback<ArrayField<ItemValue>["swap"]>(
     (indexA, indexB) => form.swap(fieldPath, indexA, indexB),
-    []
+    [form.swap]
   );
 
   const move = React.useCallback<ArrayField<ItemValue>["move"]>(
     (from, to) => form.move(fieldPath, from, to),
-    []
+    [form.move]
   );
 
   const insert = React.useCallback<ArrayField<ItemValue>["insert"]>(
     (index, value) => form.insert(fieldPath, index, value),
-    []
+    [form.insert]
   );
 
   const prepend = React.useCallback<ArrayField<ItemValue>["prepend"]>(
     (value) => form.prepend(fieldPath, value),
-    []
+    [form.prepend]
   );
 
   const remove = React.useCallback<ArrayField<ItemValue>["remove"]>(
     (index) => form.remove(fieldPath, index),
-    []
+    [form.remove]
   );
 
   const replace = React.useCallback<ArrayField<ItemValue>["replace"]>(
     (index, value) => form.replace(fieldPath, index, value),
-    []
+    [form.replace]
   );
 
   return {
