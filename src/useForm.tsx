@@ -306,7 +306,6 @@ export function useForm<
     return {
       initialValues: state.context.initialValues,
       values: state.context.values,
-      dirtyFields: state.context.dirtyFields,
       touchedFields: state.context.touchedFields,
       submit,
       reset,
