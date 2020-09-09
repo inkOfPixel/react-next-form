@@ -91,7 +91,6 @@ export function createFormMachine<Values, SubmissionResult>(
           },
         },
         submit: {
-          entry: ["incrementSubmitCount"],
           on: {
             SUBMISSION_SUCCESS: {
               target: "submitted",
