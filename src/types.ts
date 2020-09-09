@@ -24,7 +24,6 @@ export interface FormContext<
   values: Values;
   validationErrors: Record<string, FieldError>;
   changes: Patch[];
-  dirtyFields: DeepFlagMap;
   touchedFields: DeepFlagMap;
   status: FormStatus;
   isValidating: boolean;
@@ -44,7 +43,8 @@ export interface FormContext<
   setFieldTouched: (fieldPath: string, touched?: boolean) => void;
   resetField: (fieldPath: string) => void;
   isTouched(fieldPath: string): boolean;
-  isDirty(fieldPath: string): boolean;
+  isFieldDirty(fieldPath: string): boolean;
+  isDirty: boolean;
   list: <T>(fieldPath: string) => ListField<T>;
   submit: () => void;
   reset: (values?: Values, options?: ResetOptions) => void;

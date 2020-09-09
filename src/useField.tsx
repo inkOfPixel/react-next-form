@@ -44,8 +44,8 @@ export function useField<Value = any>(
   }, [fieldPath, state.isTouched]);
 
   const isDirty = React.useMemo(() => {
-    return state.isDirty(fieldPath);
-  }, [fieldPath, state.isDirty]);
+    return state.isFieldDirty(fieldPath);
+  }, [fieldPath, state.isFieldDirty]);
 
   const props = React.useMemo(() => {
     return state.fieldProps(fieldPath);

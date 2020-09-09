@@ -1,5 +1,5 @@
 import { enablePatches } from "immer";
-import { get } from "lodash";
+import { get, isEqual } from "lodash";
 import React from "react";
 import { createFormMachine } from "./machine";
 import { ChangeType, EventType, FormStatus } from "./machine/types";
@@ -245,15 +245,20 @@ export function useForm<
     [state.context.touchedFields]
   );
 
-  const isDirty = React.useCallback<
-    FormContext<Values, SubmissionResult>["isDirty"]
+  const isFieldDirty = React.useCallback<
+    FormContext<Values, SubmissionResult>["isFieldDirty"]
   >(
     (fieldPath) => {
-      const dirty = get(state.context.dirtyFields, fieldPath);
-      return dirty != null && dirty !== false;
+      const initialValue = get(state.context.initialValues, fieldPath);
+      const value = get(state.context.values, fieldPath);
+      return !isEqual(initialValue, value);
     },
-    [state.context.dirtyFields]
+    [state.context.initialValues, state.context.values]
   );
+
+  const isDirty = React.useMemo<boolean>(() => {
+    return !isEqual(state.context.initialValues, state.context.values);
+  }, [state.context.initialValues, state.context.values]);
 
   const list = React.useCallback<FormContext<Values, SubmissionResult>["list"]>(
     (fieldPath) => {
@@ -311,6 +316,7 @@ export function useForm<
       setFieldTouched,
       resetField,
       isTouched,
+      isFieldDirty,
       isDirty,
       changes,
       list,
@@ -331,7 +337,7 @@ export function useForm<
     setFieldTouched,
     resetField,
     isTouched,
-    isDirty,
+    isFieldDirty,
   ]);
 
   return form;

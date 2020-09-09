@@ -33,11 +33,16 @@ interface ExampleValues {
 }
 
 export default function Example() {
-  // const [initialValues, setInitialValues] = React.useState<ExampleValues>({
-  //   email: "",
-  //   name: "",
-  // });
-  const [initialValues, setInitialValues] = React.useState<ExampleValues>();
+  const [initialValues, setInitialValues] = React.useState<ExampleValues>({
+    email: "",
+    name: "",
+    addresses: [
+      {
+        id: uniqueId("#"),
+        street: "",
+      },
+    ],
+  });
   const form = useForm<ExampleValues>({
     initialValues,
     enableReinitialize: true,
@@ -116,7 +121,10 @@ export default function Example() {
                 </FormControl>
               </Stack>
               <FormControl id="email">
-                <FormLabel color="white">Email address</FormLabel>
+                <FormLabel color="white">
+                  Email address ( dirty: {String(form.isFieldDirty("email"))},
+                  touched: {String(form.isTouched("email"))})
+                </FormLabel>
                 <Input
                   type="email"
                   placeholder="email"
@@ -146,7 +154,15 @@ export default function Example() {
                   return (
                     <Flex align="flex-end" key={address.id}>
                       <FormControl>
-                        <FormLabel color="white">Street</FormLabel>
+                        <FormLabel color="white">
+                          Street ( dirty:{" "}
+                          {String(
+                            form.isFieldDirty(`addresses[${index}].street`)
+                          )}
+                          , touched:{" "}
+                          {String(form.isTouched(`addresses[${index}].street`))}
+                          )
+                        </FormLabel>
                         <Input
                           placeholder="name"
                           {...form.fieldProps(`addresses[${index}].street`)}
