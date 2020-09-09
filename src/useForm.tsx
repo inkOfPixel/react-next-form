@@ -114,6 +114,14 @@ export function useForm<
     });
   }, []);
 
+  const dismissSubmissionError = React.useCallback<
+    FormContext<Values, SubmissionResult>["dismissSubmissionError"]
+  >(() => {
+    send({
+      type: EventType.DismissSubmissionError,
+    });
+  }, []);
+
   const reset = React.useCallback(
     (values?: Values, options: ResetOptions = {}) => {
       send({
@@ -234,6 +242,20 @@ export function useForm<
     });
   }, []);
 
+  const dismissValidationErrors = React.useCallback<
+    FormContext<Values, SubmissionResult>["dismissValidationErrors"]
+  >((fieldPaths) => {
+    send({
+      type: EventType.DismissValidationError,
+      payload:
+        typeof fieldPaths === "string"
+          ? { fieldPaths: [fieldPaths] }
+          : Array.isArray(fieldPaths) && fieldPaths.length > 0
+          ? { fieldPaths }
+          : undefined,
+    });
+  }, []);
+
   const isTouched = React.useCallback<
     FormContext<Values, SubmissionResult>["isTouched"]
   >(
@@ -258,6 +280,10 @@ export function useForm<
   const isDirty = React.useMemo<boolean>(() => {
     return !isEqual(state.context.initialValues, state.context.values);
   }, [state.context.initialValues, state.context.values]);
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  // ARRAY METHODS
+  //////////////////////////////////////////////////////////////////////////////////////
 
   const append = React.useCallback<
     FormContext<Values, SubmissionResult>["append"]
@@ -343,6 +369,7 @@ export function useForm<
       values: state.context.values,
       touchedFields: state.context.touchedFields,
       submit,
+      dismissSubmissionError,
       reset,
       fieldProps,
       setFieldValue,
@@ -353,6 +380,7 @@ export function useForm<
       isDirty,
       changes,
       validationErrors: state.context.validationErrors,
+      dismissValidationErrors,
       status: state.value,
       isValidating: state.value === FormStatus.Validate,
       isSubmitting: state.value === FormStatus.Submit,
@@ -369,10 +397,12 @@ export function useForm<
     state.context,
     state.value,
     submit,
+    dismissSubmissionError,
     fieldProps,
     changes,
     setFieldValue,
     setFieldTouched,
+    dismissValidationErrors,
     resetField,
     isTouched,
     isFieldDirty,

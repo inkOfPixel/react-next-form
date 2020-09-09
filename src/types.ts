@@ -36,6 +36,7 @@ export interface FormContext<
     count: number;
   };
   submit: () => void;
+  dismissSubmissionError: () => void;
   reset: (values?: Values, options?: ResetOptions) => void;
   // Field
   fieldProps: <FieldValue = any>(
@@ -47,6 +48,7 @@ export interface FormContext<
   ) => void;
   setFieldTouched: (fieldPath: string, touched?: boolean) => void;
   resetField: (fieldPath: string) => void;
+  dismissValidationErrors: (fieldPaths?: string[] | string) => void;
   isTouched(fieldPath: string): boolean;
   isFieldDirty(fieldPath: string): boolean;
   // Array field
@@ -74,6 +76,7 @@ export interface Field<FieldValue = any> {
   setValue: (newValue: FieldValue) => void;
   setTouched: (touched?: boolean) => void;
   reset: () => void;
+  dismissError: () => void;
   isTouched: boolean;
   isDirty: boolean;
   props: FieldProps;
@@ -87,6 +90,7 @@ export interface ArrayField<ItemValue = any> {
   /** Replace the entire array */
   set: (array: ItemValue[]) => void;
   reset: () => void;
+  dismissError: () => void;
   append: (value: ItemValue) => void;
   swap: (indexA: number, indexB: number) => void;
   move: (from: number, to: number) => void;

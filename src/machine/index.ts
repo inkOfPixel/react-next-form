@@ -6,6 +6,7 @@ import { setFieldTouched } from "./actions/setFieldTouched";
 import { setValues } from "./actions/setValues";
 import { setValidationErrors } from "./actions/setValidationErrors";
 import { setSubmissionError } from "./actions/setSubmissionError";
+import { clearSubmissionError } from "./actions/clearSubmissionError";
 import { clearValidationErrors } from "./actions/clearValidationErrors";
 import { resetValues } from "./actions/resetValues";
 import { MachineContext, MachineEvent } from "./types";
@@ -39,6 +40,12 @@ export function createFormMachine<Values, SubmissionResult>(
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
+            DISMISS_VALIDATION_ERROR: {
+              actions: ["clearValidationErrors"],
+            },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
+            },
           },
         },
         valid: {
@@ -57,6 +64,9 @@ export function createFormMachine<Values, SubmissionResult>(
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
+            },
           },
         },
         invalid: {
@@ -71,6 +81,12 @@ export function createFormMachine<Values, SubmissionResult>(
             },
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
+            },
+            DISMISS_VALIDATION_ERROR: {
+              actions: ["clearValidationErrors"],
+            },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
             },
           },
         },
@@ -87,6 +103,9 @@ export function createFormMachine<Values, SubmissionResult>(
             },
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
+            },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
             },
           },
         },
@@ -106,6 +125,9 @@ export function createFormMachine<Values, SubmissionResult>(
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
+            },
           },
         },
         submitted: {
@@ -124,6 +146,9 @@ export function createFormMachine<Values, SubmissionResult>(
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
+            },
           },
         },
       },
@@ -136,6 +161,7 @@ export function createFormMachine<Values, SubmissionResult>(
         clearValidationErrors,
         resetValues,
         setSubmissionError,
+        clearSubmissionError,
       },
     }
   );

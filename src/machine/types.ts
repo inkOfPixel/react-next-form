@@ -23,23 +23,27 @@ export interface DeepFlagMap {
 export enum EventType {
   ValidationSuccess = "VALIDATION_SUCCESS",
   ValidationError = "VALIDATION_ERROR",
+  DismissValidationError = "DISMISS_VALIDATION_ERROR",
   Reset = "RESET",
   FieldTouched = "FIELD_TOUCHED",
   Change = "CHANGE",
   Submit = "SUBMIT",
   SubmissionSuccess = "SUBMISSION_SUCCESS",
   SubmissionError = "SUBMISSION_ERROR",
+  DismissSubmissionError = "DISMISS_SUBMISSION_ERROR",
 }
 
 export type MachineEvent<Values, SubmissionResult> =
   | ValidationSuccessEvent
   | ValidationErrorEvent
+  | DismissValidationErrorEvent
   | ResetEvent<Values>
   | FieldTouchedEvent
   | ChangeEvent
   | SubmitEvent
   | SubmitSuccessEvent<SubmissionResult>
-  | SubmitErrorEvent;
+  | SubmitErrorEvent
+  | DismissSubmissionErrorEvent;
 
 export interface ValidationSuccessEvent {
   type: EventType.ValidationSuccess;
@@ -49,6 +53,13 @@ export interface ValidationErrorEvent {
   type: EventType.ValidationError;
   payload: {
     error: ValidationError;
+  };
+}
+
+export interface DismissValidationErrorEvent {
+  type: EventType.DismissValidationError;
+  payload?: {
+    fieldPaths: string[];
   };
 }
 
@@ -81,6 +92,10 @@ export interface SubmitErrorEvent {
   payload: {
     error: string;
   };
+}
+
+export interface DismissSubmissionErrorEvent {
+  type: EventType.DismissSubmissionError;
 }
 
 export interface ChangeEvent {

@@ -31,6 +31,12 @@ export function useArrayField<ItemValue = any>(
     form.resetField(fieldPath);
   }, [fieldPath, form.resetField]);
 
+  const dismissError = React.useCallback<
+    ArrayField<ItemValue>["dismissError"]
+  >(() => {
+    form.dismissValidationErrors(fieldPath);
+  }, [fieldPath, form.dismissValidationErrors]);
+
   const isDirty = React.useMemo(() => {
     return form.isFieldDirty(fieldPath);
   }, [fieldPath, form.isFieldDirty]);
@@ -76,6 +82,7 @@ export function useArrayField<ItemValue = any>(
     error,
     set,
     reset,
+    dismissError,
     isDirty,
     append,
     swap,

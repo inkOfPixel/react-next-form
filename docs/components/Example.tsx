@@ -65,7 +65,7 @@ export default function Example() {
           <Heading color="white">useForm</Heading>
           <SimpleGrid columns={2} spacing="4">
             <Stack direction="column" bg="gray.700" p="6" borderRadius="12px">
-              <Stack wrap="nowrap" direction="row">
+              <Stack direction="row">
                 <Button
                   colorScheme="gray"
                   onClick={() => {
@@ -84,6 +84,14 @@ export default function Example() {
                   }}
                 >
                   Reset email
+                </Button>
+                <Button
+                  colorScheme="gray"
+                  onClick={() => {
+                    form.dismissValidationErrors("email");
+                  }}
+                >
+                  Dismiss email error
                 </Button>
                 <Button
                   colorScheme="gray"
@@ -123,7 +131,8 @@ export default function Example() {
               <FormControl id="email">
                 <FormLabel color="white">
                   Email address ( dirty: {String(form.isFieldDirty("email"))},
-                  touched: {String(form.isTouched("email"))})
+                  touched: {String(form.isTouched("email"))}, error:{" "}
+                  {form.validationErrors["email"]})
                 </FormLabel>
                 <Input
                   type="email"
