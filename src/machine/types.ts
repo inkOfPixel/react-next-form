@@ -164,7 +164,7 @@ export interface ListReplacePayload {
 export enum FormStatus {
   Validate = "validate",
   Valid = "valid",
-  NotValid = "notValid",
+  Invalid = "invalid",
   Submit = "submit",
   Submitted = "submitted",
   SubmissionError = "submissionError",

@@ -29,7 +29,7 @@ export function createFormMachine<Values, SubmissionResult>(
               actions: ["clearValidationErrors"],
             },
             VALIDATION_ERROR: {
-              target: "notValid",
+              target: "invalid",
               actions: ["setValidationErrors"],
             },
             RESET: {
@@ -59,7 +59,7 @@ export function createFormMachine<Values, SubmissionResult>(
             },
           },
         },
-        notValid: {
+        invalid: {
           on: {
             CHANGE: {
               target: "validate",
