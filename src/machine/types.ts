@@ -90,24 +90,24 @@ export interface ChangeEvent {
 
 export enum ChangeType {
   Set = "set",
-  ListAppend = "list_append",
-  ListSwap = "list_swap",
-  ListMove = "list_move",
-  ListInsert = "list_insert",
-  ListPrepend = "list_prepend",
-  ListRemove = "list_remove",
-  ListReplace = "list_replace",
+  ArrayAppend = "array_append",
+  ArraySwap = "array_swap",
+  ArrayMove = "array_move",
+  ArrayInsert = "array_insert",
+  ArrayPrepend = "array_prepend",
+  ArrayRemove = "array_remove",
+  ArrayReplace = "array_replace",
 }
 
 export type ChangeEventPayload =
   | SetPayload
-  | ListAppendPayload
-  | ListSwapPayload
-  | ListMovePayload
-  | ListInsertPayload
-  | ListPrependPayload
-  | ListRemovePayload
-  | ListReplacePayload;
+  | ArrayAppendPayload
+  | ArraySwapPayload
+  | ArrayMovePayload
+  | ArrayInsertPayload
+  | ArrayPrependPayload
+  | ArrayRemovePayload
+  | ArrayReplacePayload;
 
 export interface SetPayload {
   type: ChangeType.Set;
@@ -115,47 +115,47 @@ export interface SetPayload {
   value: unknown;
 }
 
-export interface ListAppendPayload {
-  type: ChangeType.ListAppend;
+export interface ArrayAppendPayload {
+  type: ChangeType.ArrayAppend;
   fieldPath: string;
   value: unknown;
 }
 
-export interface ListSwapPayload {
-  type: ChangeType.ListSwap;
+export interface ArraySwapPayload {
+  type: ChangeType.ArraySwap;
   fieldPath: string;
   indexA: number;
   indexB: number;
 }
 
-export interface ListMovePayload {
-  type: ChangeType.ListMove;
+export interface ArrayMovePayload {
+  type: ChangeType.ArrayMove;
   fieldPath: string;
   from: number;
   to: number;
 }
 
-export interface ListInsertPayload {
-  type: ChangeType.ListInsert;
+export interface ArrayInsertPayload {
+  type: ChangeType.ArrayInsert;
   fieldPath: string;
   index: number;
   value: unknown;
 }
 
-export interface ListPrependPayload {
-  type: ChangeType.ListPrepend;
+export interface ArrayPrependPayload {
+  type: ChangeType.ArrayPrepend;
   fieldPath: string;
   value: unknown;
 }
 
-export interface ListRemovePayload {
-  type: ChangeType.ListRemove;
+export interface ArrayRemovePayload {
+  type: ChangeType.ArrayRemove;
   fieldPath: string;
   index: number;
 }
 
-export interface ListReplacePayload {
-  type: ChangeType.ListReplace;
+export interface ArrayReplacePayload {
+  type: ChangeType.ArrayReplace;
   fieldPath: string;
   index: number;
   value: unknown;

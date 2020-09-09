@@ -143,7 +143,7 @@ export default function Example() {
                   colorScheme="blue"
                   onClick={() => {
                     const id = uniqueId("#");
-                    form.list("addresses").append({ id, street: "" });
+                    form.append("addresses", { id, street: "" });
                   }}
                 >
                   Add
@@ -172,7 +172,7 @@ export default function Example() {
                         ml="2"
                         colorScheme="red"
                         onClick={() => {
-                          form.list("addresses").remove(index);
+                          form.remove("addresses", index);
                         }}
                       >
                         Remove

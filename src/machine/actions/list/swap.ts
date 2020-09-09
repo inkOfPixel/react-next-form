@@ -1,10 +1,10 @@
 import { produceWithPatches } from "immer";
 import { update } from "lodash";
-import { ListSwapPayload, MachineContext } from "../../types";
+import { ArraySwapPayload, MachineContext } from "../../types";
 
 export const swap = <Values, SubmissionResult>(
   context: MachineContext<Values, SubmissionResult>,
-  payload: ListSwapPayload
+  payload: ArraySwapPayload
 ) => {
   const { fieldPath, indexA, indexB } = payload;
 

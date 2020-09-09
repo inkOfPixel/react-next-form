@@ -20,6 +20,7 @@ export interface FormContext<
   Values extends Record<string, any>,
   SubmissionResult = any
 > {
+  // Form
   initialValues: Values;
   values: Values;
   validationErrors: Record<string, FieldError>;
@@ -28,11 +29,15 @@ export interface FormContext<
   status: FormStatus;
   isValidating: boolean;
   isSubmitting: boolean;
+  isDirty: boolean;
   submission: {
     result?: SubmissionResult;
     error?: string;
     count: number;
   };
+  submit: () => void;
+  reset: (values?: Values, options?: ResetOptions) => void;
+  // Field
   fieldProps: <FieldValue = any>(
     options: FieldPropsOptions<FieldValue> | string
   ) => FieldProps;
@@ -44,12 +49,22 @@ export interface FormContext<
   resetField: (fieldPath: string) => void;
   isTouched(fieldPath: string): boolean;
   isFieldDirty(fieldPath: string): boolean;
-  isDirty: boolean;
-  list: <T>(fieldPath: string) => ListField<T>;
-  submit: () => void;
-  reset: (values?: Values, options?: ResetOptions) => void;
-  // undo: () => void;
-  // redo: () => void;
+  // Array field
+  append: <ItemValue = any>(fieldPath: string, value: ItemValue) => void;
+  swap: (fieldPath: string, indexA: number, indexB: number) => void;
+  move: (fieldPath: string, from: number, to: number) => void;
+  insert: <ItemValue = any>(
+    fieldPath: string,
+    index: number,
+    value: ItemValue
+  ) => void;
+  prepend: <ItemValue = any>(fieldPath: string, value: ItemValue) => void;
+  remove: (fieldPath: string, index: number) => void;
+  replace: <ItemValue = any>(
+    fieldPath: string,
+    index: number,
+    value: ItemValue
+  ) => void;
 }
 
 export interface Field<FieldValue = any> {
@@ -64,9 +79,14 @@ export interface Field<FieldValue = any> {
   props: FieldProps;
 }
 
-export interface ListField<ItemValue = any> {
+export interface ArrayField<ItemValue = any> {
   initialValue?: ItemValue[];
   value?: ItemValue[];
+  error?: FieldError;
+  isDirty: boolean;
+  /** Replace the entire array */
+  set: (array: ItemValue[]) => void;
+  reset: () => void;
   append: (value: ItemValue) => void;
   swap: (indexA: number, indexB: number) => void;
   move: (from: number, to: number) => void;

@@ -1,10 +1,10 @@
 import { produceWithPatches } from "immer";
 import { update } from "lodash";
-import { ListPrependPayload, MachineContext } from "../../types";
+import { ArrayPrependPayload, MachineContext } from "../../types";
 
 export const prepend = <Values, SubmissionResult>(
   context: MachineContext<Values, SubmissionResult>,
-  payload: ListPrependPayload
+  payload: ArrayPrependPayload
 ) => {
   const { fieldPath, value } = payload;
 

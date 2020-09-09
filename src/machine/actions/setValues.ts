@@ -21,25 +21,25 @@ function setValuesRecipe<Values, SubmissionResult>(
     case ChangeType.Set: {
       return setFieldValue(context, event.payload);
     }
-    case ChangeType.ListAppend: {
+    case ChangeType.ArrayAppend: {
       return append(context, event.payload);
     }
-    case ChangeType.ListSwap: {
+    case ChangeType.ArraySwap: {
       return swap(context, event.payload);
     }
-    case ChangeType.ListMove: {
+    case ChangeType.ArrayMove: {
       return move(context, event.payload);
     }
-    case ChangeType.ListInsert: {
+    case ChangeType.ArrayInsert: {
       return insert(context, event.payload);
     }
-    case ChangeType.ListPrepend: {
+    case ChangeType.ArrayPrepend: {
       return prepend(context, event.payload);
     }
-    case ChangeType.ListRemove: {
+    case ChangeType.ArrayRemove: {
       return remove(context, event.payload);
     }
-    case ChangeType.ListReplace: {
+    case ChangeType.ArrayReplace: {
       return replace(context, event.payload);
     }
     default:

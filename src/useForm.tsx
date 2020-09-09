@@ -259,46 +259,81 @@ export function useForm<
     return !isEqual(state.context.initialValues, state.context.values);
   }, [state.context.initialValues, state.context.values]);
 
-  const list = React.useCallback<FormContext<Values, SubmissionResult>["list"]>(
-    (fieldPath) => {
-      return {
-        append: (value) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListAppend, fieldPath, value },
-          }),
-        swap: (indexA, indexB) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListSwap, fieldPath, indexA, indexB },
-          }),
-        move: (from, to) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListMove, fieldPath, from, to },
-          }),
-        insert: (index, value) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListInsert, fieldPath, value, index },
-          }),
-        prepend: (value) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListPrepend, fieldPath, value },
-          }),
-        remove: (index) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListRemove, fieldPath, index },
-          }),
-        replace: (index, value) =>
-          send({
-            type: EventType.Change,
-            payload: { type: ChangeType.ListReplace, fieldPath, value, index },
-          }),
-      };
-    },
+  const append = React.useCallback<
+    FormContext<Values, SubmissionResult>["append"]
+  >(
+    (fieldPath, value) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArrayAppend, fieldPath, value },
+      }),
+    []
+  );
+
+  const swap = React.useCallback<FormContext<Values, SubmissionResult>["swap"]>(
+    (fieldPath, indexA, indexB) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArraySwap, fieldPath, indexA, indexB },
+      }),
+    []
+  );
+
+  const move = React.useCallback<FormContext<Values, SubmissionResult>["move"]>(
+    (fieldPath, from, to) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArrayMove, fieldPath, from, to },
+      }),
+    []
+  );
+
+  const insert = React.useCallback<
+    FormContext<Values, SubmissionResult>["insert"]
+  >(
+    (fieldPath, index, value) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArrayInsert, fieldPath, value, index },
+      }),
+    []
+  );
+
+  const prepend = React.useCallback<
+    FormContext<Values, SubmissionResult>["prepend"]
+  >(
+    (fieldPath, value) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArrayPrepend, fieldPath, value },
+      }),
+    []
+  );
+
+  const remove = React.useCallback<
+    FormContext<Values, SubmissionResult>["remove"]
+  >(
+    (fieldPath, index) =>
+      send({
+        type: EventType.Change,
+        payload: { type: ChangeType.ArrayRemove, fieldPath, index },
+      }),
+    []
+  );
+
+  const replace = React.useCallback<
+    FormContext<Values, SubmissionResult>["replace"]
+  >(
+    (fieldPath, index, value) =>
+      send({
+        type: EventType.Change,
+        payload: {
+          type: ChangeType.ArrayReplace,
+          fieldPath,
+          value,
+          index,
+        },
+      }),
     []
   );
 
@@ -317,25 +352,37 @@ export function useForm<
       isFieldDirty,
       isDirty,
       changes,
-      list,
       validationErrors: state.context.validationErrors,
       status: state.value,
       isValidating: state.value === FormStatus.Validate,
       isSubmitting: state.value === FormStatus.Submit,
       submission: state.context.submission,
+      append,
+      swap,
+      move,
+      insert,
+      prepend,
+      remove,
+      replace,
     };
   }, [
     state.context,
     state.value,
     submit,
     fieldProps,
-    list,
     changes,
     setFieldValue,
     setFieldTouched,
     resetField,
     isTouched,
     isFieldDirty,
+    append,
+    swap,
+    move,
+    insert,
+    prepend,
+    remove,
+    replace,
   ]);
 
   return form;

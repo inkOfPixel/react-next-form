@@ -1,10 +1,10 @@
 import { produceWithPatches } from "immer";
 import { update } from "lodash";
-import { ListInsertPayload, MachineContext } from "../../types";
+import { ArrayInsertPayload, MachineContext } from "../../types";
 
 export const insert = <Values, SubmissionResult>(
   context: MachineContext<Values, SubmissionResult>,
-  payload: ListInsertPayload
+  payload: ArrayInsertPayload
 ) => {
   const { fieldPath, value, index } = payload;
 
