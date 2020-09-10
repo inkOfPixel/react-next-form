@@ -43,6 +43,7 @@ function resetValuesRecipe<Values, SubmissionResult>(
     if (!keepTouchedStatus) {
       context.touchedFields = {};
     }
+    context.lastChangedAt = Date.now();
   } else if (event.type === EventType.SubmissionSuccess) {
     context.initialValues = context.values;
     context.touchedFields = {};

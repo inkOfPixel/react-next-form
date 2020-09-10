@@ -20,7 +20,6 @@ export const validate = async <V extends object>(
   onDone: (error?: ValidationError) => void
 ) => {
   try {
-    await delay(2000);
     await schema.validate(values, {
       abortEarly: false,
       strict: true,

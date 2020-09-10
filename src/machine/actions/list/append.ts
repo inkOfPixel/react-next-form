@@ -24,5 +24,6 @@ export const append = <Values, SubmissionResult>(
     values: nextValues,
     patches: context.patches.concat(patches),
     inversePatches: context.inversePatches.concat(inversePatches),
+    lastChangedAt: Date.now(),
   };
 };
