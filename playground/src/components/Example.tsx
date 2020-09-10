@@ -130,7 +130,7 @@ export default function Example() {
                   <CustomSwitch id="dirty" mt="-5px" name="meta.keepDirty" />
                 </FormControl>
               </Stack>
-              <FormControl id="email">
+              {/* <FormControl id="email">
                 <FormLabel color="white">
                   Email address ( dirty: {String(form.isFieldDirty("email"))},
                   touched: {String(form.isTouched("email"))}, error:{" "}
@@ -141,7 +141,8 @@ export default function Example() {
                   placeholder="email"
                   {...form.fieldProps("email")}
                 />
-              </FormControl>
+              </FormControl> */}
+              <input type="text" {...form.fieldProps("email")} />
               <FormControl id="name">
                 <FormLabel color="white">First name</FormLabel>
                 <Input placeholder="name" {...form.fieldProps("name")} />

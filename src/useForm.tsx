@@ -152,6 +152,7 @@ export function useForm<
         onChange: (x: React.ChangeEvent<HTMLInputElement> | unknown) => {
           let nextValue: unknown;
           if (isEvent(x)) {
+            console.log("is event", x.currentTarget.value);
             let eventValue: string | undefined = x.currentTarget.value;
             nextValue = eventValue == null ? value : eventValue;
             if (x.currentTarget.type === "checkbox") {
@@ -177,6 +178,7 @@ export function useForm<
               }
             }
           }
+          console.log("SEND", { fieldPath, nextValue });
           send({
             type: EventType.Change,
             payload: {

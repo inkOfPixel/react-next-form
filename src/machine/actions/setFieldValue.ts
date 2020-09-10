@@ -8,6 +8,8 @@ export const setFieldValue = <Values, SubmissionResult>(
 ) => {
   const { fieldPath, value } = payload;
 
+  console.log("SET", payload);
+
   const [nextValues, patches, inversePatches] = produceWithPatches(
     context.values,
     (draft) => {

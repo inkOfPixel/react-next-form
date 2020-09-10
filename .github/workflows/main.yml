@@ -3,7 +3,7 @@ on:
   push:
     paths-ignore:
       - "README.md"
-      - "docs/**"
+      - "website/**"
       - "playground/**"
     branches:
       - "master"

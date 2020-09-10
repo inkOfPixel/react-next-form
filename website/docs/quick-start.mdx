@@ -1,0 +1,35 @@
+---
+title: Quick start
+slug: /
+hide_table_of_contents: true
+---
+
+React Next Form is a lightweight React library for form state management. It simplifies the development of form for CRUD interfaces
+and supports validation (with yup), partial reset that enables realtime updates.
+
+## Installation
+
+React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduction) for immutable updates and [yup](https://github.com/jquense/yup) for schema validation.
+
+```bash
+# npm
+npm i --save react-next-form immer yup
+
+# or yarn
+yarn add -E react-next-form immer yup
+```
+
+## The gist
+
+```jsx
+import { useForm } from "react-next-form";
+import * as yup from "yup";
+
+function MyPlayground(props) {
+  return (
+    <div>
+      <ButtonExample onClick={() => alert("hey!")}>Click me</ButtonExample>
+    </div>
+  );
+}
+```

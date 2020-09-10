@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 
 const features = [
   {
-    title: "Easy to Use",
+    title: "Simple API",
     imageUrl: "img/undraw_docusaurus_mountain.svg",
     description: (
       <>
@@ -18,17 +18,17 @@ const features = [
     ),
   },
   {
-    title: "Focus on What Matters",
+    title: "Supports realtime updates",
     imageUrl: "img/undraw_docusaurus_tree.svg",
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        React Next Form supports realtime updates with partial reset, so the
+        user will get updated data without losing drafted fields
       </>
     ),
   },
   {
-    title: "Powered by React",
+    title: "Validation with Yup",
     imageUrl: "img/undraw_docusaurus_react.svg",
     description: (
       <>
@@ -60,7 +60,7 @@ function Home() {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      description="A React library to make it easy to simplify CRUD form"
     >
       <header className={clsx("hero hero--primary", styles.heroBanner)}>
         <div className="container">

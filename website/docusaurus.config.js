@@ -19,9 +19,9 @@ module.exports = {
           to: "docs/",
           activeBasePath: "docs",
           label: "Docs",
-          position: "left",
+          position: "right",
         },
-        { to: "blog", label: "Blog", position: "left" },
+        { to: "blog", label: "Blog", position: "right" },
         {
           href: "https://github.com/inkOfPixel/react-next-form",
           label: "GitHub",
@@ -102,4 +102,5 @@ module.exports = {
       },
     ],
   ],
+  themes: ["@docusaurus/theme-live-codeblock"],
 };

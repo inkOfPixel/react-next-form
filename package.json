@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "docs": "cd docs; yarn start;",
+    "website": "cd website; yarn start;",
     "playground": "cd playground; yarn start;",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
