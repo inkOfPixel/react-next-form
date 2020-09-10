@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useForm, useFormContext, FormProvider } from "../../.";
+import { useForm, useFormContext, FormProvider } from "react-next-form";
 import {
   Box,
   Text,
@@ -17,10 +17,10 @@ import {
 } from "@chakra-ui/core";
 import ReactJson from "react-json-view";
 import { uniqueId } from "lodash";
-import { enablePatches } from "immer";
+// import { enablePatches } from "immer";
 import * as yup from "yup";
 
-enablePatches();
+// enablePatches();
 
 interface ExampleValues {
   email: string;
@@ -46,9 +46,11 @@ export default function Example() {
   const form = useForm<ExampleValues>({
     initialValues,
     enableReinitialize: true,
-    validationSchema: yup.object().shape({
-      email: yup.string().required("email is required"),
-      name: yup.string(),
+    validationSchema: yup.object<ExampleValues>().shape<any>({
+      email: yup.string().required(),
+      name: yup.string().required(),
+      // email: yup.string().required("email is required"),
+      // name: yup.string(),
     }),
     onSubmit: async (values, context) => {
       console.log("Submit!", { values, context });
@@ -245,7 +247,7 @@ export default function Example() {
 function CustomSwitch(props: SwitchProps) {
   const form = useFormContext<ExampleValues>();
   const fieldProps = form.fieldProps({
-    name: props.name,
+    name: props.name as any,
     type: "checkbox",
   });
   return <Switch {...props} {...fieldProps} isChecked={fieldProps.checked} />;
@@ -267,6 +269,7 @@ function useWhyDidYouUpdate(name: string, props: any) {
         // If previous is different from current
         if (previousProps.current[key] !== props[key]) {
           // Add to changesObj
+          // @ts-ignore
           changesObj[key] = {
             from: previousProps.current[key],
             to: props[key],

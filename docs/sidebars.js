@@ -1,7 +1,13 @@
 module.exports = {
   docs: {
-    "Getting Started": ["introduction", "installation", "doc3"],
+    "Getting Started": ["introduction", "installation", "basic-tutorial"],
     Guides: ["basic-form", "validation", "array-fields", "form-submission"],
-    "API Reference": ["use-form", "form-provider", "use-form-context"],
+    "API Reference": [
+      "use-form",
+      "form-provider",
+      "use-field",
+      "use-array-field",
+      "use-form-context",
+    ],
   },
 };

@@ -13,6 +13,7 @@
   "scripts": {
     "start": "tsdx watch",
     "docs": "cd docs; yarn start;",
+    "playground": "cd playground; yarn start;",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",

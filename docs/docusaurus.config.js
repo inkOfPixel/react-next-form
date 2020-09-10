@@ -22,9 +22,8 @@ module.exports = {
           position: "left",
         },
         { to: "blog", label: "Blog", position: "left" },
-        { to: "showcase", label: "Showcase", position: "left" },
         {
-          href: "https://github.com/inkOfPixel/next-form",
+          href: "https://github.com/inkOfPixel/react-next-form",
           label: "GitHub",
           position: "right",
         },
@@ -51,7 +50,8 @@ module.exports = {
           items: [
             {
               label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus",
+              href:
+                "https://stackoverflow.com/questions/tagged/react-next-form",
             },
             {
               label: "Discord",
@@ -72,7 +72,7 @@ module.exports = {
             },
             {
               label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
+              href: "https://github.com/inkOfPixel/react-next-form",
             },
           ],
         },
@@ -88,13 +88,13 @@ module.exports = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/",
+            "https://github.com/inkOfPixel/react-next-form/edit/master/docs",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/blog/",
+            "https://github.com/inkOfPixel/react-next-form/edit/master/docs/blog/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
