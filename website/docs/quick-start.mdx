@@ -4,8 +4,7 @@ slug: /
 hide_table_of_contents: true
 ---
 
-React Next Form is a lightweight React library for form state management. It simplifies the development of form for CRUD interfaces
-and supports validation (with yup), partial reset that enables realtime updates.
+React Next Form is a lightweight React library for form state management. It eliminates a lot of boilerplate code, and less code means fewer bugs and things to worry about.
 
 ## Installation
 
@@ -19,17 +18,46 @@ npm i --save react-next-form immer yup
 yarn add -E react-next-form immer yup
 ```
 
-## The gist
+## Basic form
 
 ```jsx
+import React from "react";
 import { useForm } from "react-next-form";
-import * as yup from "yup";
 
-function MyPlayground(props) {
+export default function App() {
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
+    onSubmit: async (values) => {
+      alert(`Hey ${values.name?.length > 0 ? values.name : "buddy"}`);
+    },
+  });
+
   return (
-    <div>
-      <ButtonExample onClick={() => alert("hey!")}>Click me</ButtonExample>
+    <div className="App">
+      <h1>Hello {form.values.name.length > 0 ? form.values.name : "buddy"}!</h1>
+      <form onSubmit={() => form.submit()}>
+        <div className="input">
+          <label htmlFor="foo">Your name:</label>
+          <input
+            id="foo"
+            placeholder="type your name"
+            type="text"
+            {...form.fieldProps("name")}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 }
 ```
+
+<iframe
+  src="https://codesandbox.io/embed/react-next-form-hello-world-lqzsl?fontsize=14&hidenavigation=1&theme=dark"
+  style={{width:"100%", height: 500, border:0, borderRadius: 4, overflow: "hidden"}}
+  title="React Next Form - Hello world"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>

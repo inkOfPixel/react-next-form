@@ -102,5 +102,4 @@ module.exports = {
       },
     ],
   ],
-  themes: ["@docusaurus/theme-live-codeblock"],
 };

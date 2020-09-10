@@ -13,7 +13,6 @@
   "dependencies": {
     "@docusaurus/core": "2.0.0-alpha.63",
     "@docusaurus/preset-classic": "2.0.0-alpha.63",
-    "@docusaurus/theme-live-codeblock": "2.0.0-alpha.39",
     "@mdx-js/react": "1.6.16",
     "clsx": "1.1.1",
     "immer": "7.0.8",

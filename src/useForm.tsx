@@ -32,7 +32,7 @@ export function useForm<
       touchedFields: {},
       shouldValidate: options.validationSchema != null,
     });
-  }, []);
+  });
 
   const lastChangedAtRef = useLatestRef(state.context.lastChangedAt);
 

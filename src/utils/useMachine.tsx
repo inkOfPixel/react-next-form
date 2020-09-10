@@ -10,8 +10,7 @@ export function useMachine<
 >(
   machine:
     | StateMachine.Machine<Context, Event, State>
-    | (() => StateMachine.Machine<Context, Event, State>),
-  dependencies: DependencyList
+    | (() => StateMachine.Machine<Context, Event, State>)
 ): [
   StateMachine.State<Context, Event, State>,
   (event: Event | Event["type"]) => void,
@@ -22,9 +21,8 @@ export function useMachine<
       return machine();
     }
     return machine;
-  }, dependencies);
+  }, []);
 
-  const isMounted = useIsMounted();
   const serviceRef = React.useRef<
     StateMachine.Service<Context, Event, State>
   >();
@@ -36,12 +34,6 @@ export function useMachine<
   });
 
   React.useEffect(() => {
-    if (isMounted) {
-      serviceRef.current = interpret(cachedMachine);
-      serviceRef.current!.start();
-      serviceRef.current.send(EventType.Transient);
-      setState(serviceRef.current.state);
-    }
     serviceRef.current!.subscribe((state) => {
       setState(state);
     });
@@ -51,15 +43,7 @@ export function useMachine<
       }
       serviceRef.current!.stop();
     };
-  }, [cachedMachine]);
+  }, []);
 
   return [state, serviceRef.current!.send, serviceRef.current!];
-}
-
-function useIsMounted() {
-  const isMountedRef = React.useRef(false);
-  React.useEffect(() => {
-    isMountedRef.current = true;
-  }, []);
-  return isMountedRef.current;
 }
