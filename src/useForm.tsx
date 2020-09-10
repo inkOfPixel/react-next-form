@@ -6,6 +6,8 @@ import { ChangeType, EventType, FormStatus } from "./machine/types";
 import { FieldProps, FormContext, FormOptions, ResetOptions } from "./types";
 import { compressPatches, isEvent, validate } from "./utils";
 import { useMachine } from "./utils/useMachine";
+import { useLatestRef } from "./utils/useLatestRef";
+import useDebounce from "./utils/useDebounce";
 
 enablePatches();
 
@@ -28,8 +30,23 @@ export function useForm<
       patches: [],
       inversePatches: [],
       touchedFields: {},
+      shouldValidate: options.validationSchema != null,
     });
-  });
+  }, []);
+
+  const lastChangedAtRef = useLatestRef(state.context.lastChangedAt);
+
+  useDebounce(
+    () => {
+      if (state.value === FormStatus.PendingValidation) {
+        send({
+          type: EventType.Validate,
+        });
+      }
+    },
+    400,
+    [state.context.lastChangedAt, state.value]
+  );
 
   const changes = React.useMemo(() => {
     const compressedPatches = compressPatches(
@@ -45,17 +62,19 @@ export function useForm<
       case FormStatus.Validate: {
         if (options.validationSchema) {
           validate(options.validationSchema, state.context.values, (error) => {
-            if (error) {
-              send({
-                type: EventType.ValidationError,
-                payload: {
-                  error,
-                },
-              });
-            } else {
-              send({
-                type: EventType.ValidationSuccess,
-              });
+            if (state.context.lastChangedAt === lastChangedAtRef.current) {
+              if (error) {
+                send({
+                  type: EventType.ValidationError,
+                  payload: {
+                    error,
+                  },
+                });
+              } else {
+                send({
+                  type: EventType.ValidationSuccess,
+                });
+              }
             }
           });
         } else {
@@ -91,7 +110,7 @@ export function useForm<
       default:
         break;
     }
-  }, [state.context, changes, options]);
+  }, [state.value]);
 
   React.useEffect(() => {
     if (options.enableReinitialize) {
@@ -152,7 +171,6 @@ export function useForm<
         onChange: (x: React.ChangeEvent<HTMLInputElement> | unknown) => {
           let nextValue: unknown;
           if (isEvent(x)) {
-            console.log("is event", x.currentTarget.value);
             let eventValue: string | undefined = x.currentTarget.value;
             nextValue = eventValue == null ? value : eventValue;
             if (x.currentTarget.type === "checkbox") {
@@ -178,7 +196,6 @@ export function useForm<
               }
             }
           }
-          console.log("SEND", { fieldPath, nextValue });
           send({
             type: EventType.Change,
             payload: {

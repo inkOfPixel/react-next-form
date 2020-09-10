@@ -14,6 +14,8 @@ export interface MachineContext<Values, SubmissionResult = unknown> {
   patches: Patch[];
   inversePatches: Patch[];
   touchedFields: DeepFlagMap;
+  lastChangedAt?: number;
+  shouldValidate: boolean;
 }
 
 export interface DeepFlagMap {
@@ -21,6 +23,8 @@ export interface DeepFlagMap {
 }
 
 export enum EventType {
+  Transient = "",
+  Validate = "VALIDATE",
   ValidationSuccess = "VALIDATION_SUCCESS",
   ValidationError = "VALIDATION_ERROR",
   DismissValidationError = "DISMISS_VALIDATION_ERROR",
@@ -34,6 +38,8 @@ export enum EventType {
 }
 
 export type MachineEvent<Values, SubmissionResult> =
+  | TransientEvent
+  | ValidateEvent
   | ValidationSuccessEvent
   | ValidationErrorEvent
   | DismissValidationErrorEvent
@@ -44,6 +50,14 @@ export type MachineEvent<Values, SubmissionResult> =
   | SubmitSuccessEvent<SubmissionResult>
   | SubmitErrorEvent
   | DismissSubmissionErrorEvent;
+
+export interface TransientEvent {
+  type: EventType.Transient;
+}
+
+export interface ValidateEvent {
+  type: EventType.Validate;
+}
 
 export interface ValidationSuccessEvent {
   type: EventType.ValidationSuccess;
@@ -177,6 +191,7 @@ export interface ArrayReplacePayload {
 }
 
 export enum FormStatus {
+  PendingValidation = "pendingValidation",
   Validate = "validate",
   Valid = "valid",
   Invalid = "invalid",

@@ -1,5 +1,5 @@
 import { applyPatches, Patch, produceWithPatches } from "immer";
-import { Schema, ValidationError } from "yup";
+import { ObjectSchema, ValidationError } from "yup";
 
 export function isEvent(
   obj: unknown
@@ -14,12 +14,13 @@ export function compressPatches<V>(initialValues: V, currentPatches: Patch[]) {
   return patches || [];
 }
 
-export const validate = async <V>(
-  schema: Schema<V>,
+export const validate = async <V extends object>(
+  schema: ObjectSchema<V>,
   values: V,
   onDone: (error?: ValidationError) => void
 ) => {
   try {
+    await delay(2000);
     await schema.validate(values, {
       abortEarly: false,
       strict: true,
@@ -32,4 +33,10 @@ export const validate = async <V>(
 
 export function assertNever(x: never): never {
   throw new Error("Unexpected action: " + x);
+}
+
+export async function delay(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

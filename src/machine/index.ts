@@ -1,5 +1,5 @@
 /**
- * Machine viz: https://xstate.js.org/viz/?gist=bfb54bad468a9969006df3e08d0ce7ba
+ * Machine viz: https://xstate.js.org/viz/?gist=83a6bda5f9955e31b7db1d22d4871e71
  */
 import { createMachine } from "@xstate/fsm";
 import { setFieldTouched } from "./actions/setFieldTouched";
@@ -20,9 +20,22 @@ export function createFormMachine<Values, SubmissionResult>(
   >(
     {
       id: "form",
-      initial: "validate",
+      initial: "init",
       context: initialContext,
       states: {
+        init: {
+          on: {
+            "": [
+              {
+                target: "validate",
+                cond: shouldValidate,
+              },
+              {
+                target: "valid",
+              },
+            ],
+          },
+        },
         validate: {
           on: {
             VALIDATION_SUCCESS: {
@@ -33,8 +46,34 @@ export function createFormMachine<Values, SubmissionResult>(
               target: "invalid",
               actions: ["setValidationErrors"],
             },
+            CHANGE: {
+              target: "pendingValidation",
+              actions: ["setValues"],
+            },
             RESET: {
+              target: "pendingValidation",
+              actions: ["resetValues"],
+            },
+            FIELD_TOUCHED: {
+              actions: ["setFieldTouched"],
+            },
+            DISMISS_VALIDATION_ERROR: {
+              actions: ["clearValidationErrors"],
+            },
+            DISMISS_SUBMISSION_ERROR: {
+              actions: ["clearSubmissionError"],
+            },
+          },
+        },
+        pendingValidation: {
+          on: {
+            VALIDATE: {
               target: "validate",
+            },
+            CHANGE: {
+              actions: ["setValues"],
+            },
+            RESET: {
               actions: ["resetValues"],
             },
             FIELD_TOUCHED: {
@@ -50,17 +89,29 @@ export function createFormMachine<Values, SubmissionResult>(
         },
         valid: {
           on: {
-            CHANGE: {
-              target: "validate",
-              actions: ["setValues"],
-            },
+            CHANGE: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["setValues"],
+              },
+              {
+                actions: ["setValues"],
+              },
+            ],
             SUBMIT: {
               target: "submit",
             },
-            RESET: {
-              target: "validate",
-              actions: ["resetValues"],
-            },
+            RESET: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["resetValues"],
+              },
+              {
+                actions: ["resetValues"],
+              },
+            ],
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
@@ -72,11 +123,11 @@ export function createFormMachine<Values, SubmissionResult>(
         invalid: {
           on: {
             CHANGE: {
-              target: "validate",
+              target: "pendingValidation",
               actions: ["setValues"],
             },
             RESET: {
-              target: "validate",
+              target: "pendingValidation",
               actions: ["resetValues"],
             },
             FIELD_TOUCHED: {
@@ -113,14 +164,28 @@ export function createFormMachine<Values, SubmissionResult>(
             SUBMIT: {
               target: "submit",
             },
-            CHANGE: {
-              target: "validate",
-              actions: ["setValues"],
-            },
-            RESET: {
-              target: "validate",
-              actions: ["resetValues"],
-            },
+            CHANGE: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["setValues"],
+              },
+              {
+                target: "valid",
+                actions: ["setValues"],
+              },
+            ],
+            RESET: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["resetValues"],
+              },
+              {
+                target: "valid",
+                actions: ["resetValues"],
+              },
+            ],
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
@@ -134,14 +199,28 @@ export function createFormMachine<Values, SubmissionResult>(
             SUBMIT: {
               target: "submit",
             },
-            CHANGE: {
-              target: "validate",
-              actions: ["setValues"],
-            },
-            RESET: {
-              target: "validate",
-              actions: ["resetValues"],
-            },
+            CHANGE: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["setValues"],
+              },
+              {
+                target: "valid",
+                actions: ["setValues"],
+              },
+            ],
+            RESET: [
+              {
+                target: "pendingValidation",
+                cond: shouldValidate,
+                actions: ["resetValues"],
+              },
+              {
+                target: "valid",
+                actions: ["resetValues"],
+              },
+            ],
             FIELD_TOUCHED: {
               actions: ["setFieldTouched"],
             },
@@ -165,3 +244,7 @@ export function createFormMachine<Values, SubmissionResult>(
     }
   );
 }
+
+const shouldValidate = <Values, SubmissionResult>(
+  context: MachineContext<Values, SubmissionResult>
+): boolean => context.shouldValidate;
