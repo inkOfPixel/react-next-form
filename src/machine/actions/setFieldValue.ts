@@ -5,10 +5,8 @@ import { MachineContext, SetPayload } from "../types";
 export const setFieldValue = <Values, SubmissionResult>(
   context: MachineContext<Values, SubmissionResult>,
   payload: SetPayload
-) => {
+): MachineContext<Values, SubmissionResult> => {
   const { fieldPath, value } = payload;
-
-  console.log("SET", payload);
 
   const [nextValues, patches, inversePatches] = produceWithPatches(
     context.values,
@@ -26,5 +24,6 @@ export const setFieldValue = <Values, SubmissionResult>(
     values: nextValues,
     patches: context.patches.concat(patches),
     inversePatches: context.inversePatches.concat(inversePatches),
+    lastChangedAt: Date.now(),
   };
 };

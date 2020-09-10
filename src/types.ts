@@ -1,5 +1,5 @@
 import { Patch } from "immer";
-import { Schema } from "yup";
+import { ObjectSchema } from "yup";
 import { DeepFlagMap, FormStatus } from "./machine/types";
 
 export interface FormOptions<
@@ -13,7 +13,7 @@ export interface FormOptions<
     values: Values,
     context: SubmissionContext<Values>
   ) => Promise<SubmissionResult>;
-  validationSchema?: Schema<Values>;
+  validationSchema?: ObjectSchema<Values>;
 }
 
 export interface FormContext<
