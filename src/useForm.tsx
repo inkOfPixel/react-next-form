@@ -4,7 +4,7 @@ import React from "react";
 import { createFormMachine } from "./machine";
 import { ChangeType, EventType, FormStatus } from "./machine/types";
 import { FieldProps, FormContext, FormOptions, ResetOptions } from "./types";
-import { compressPatches, isEvent, validate } from "./utils";
+import { compressPatches, isEvent, validate, isPromise } from "./utils";
 import { useMachine } from "./utils/useMachine";
 import { useLatestRef } from "./utils/useLatestRef";
 import useDebounce from "./utils/useDebounce";
@@ -77,34 +77,52 @@ export function useForm<
               }
             }
           });
-        } else {
-          // @TODO: handle missing validation schema: form is always valid
         }
         break;
       }
       case FormStatus.Submit: {
-        options
-          .onSubmit(state.context.values, {
+        try {
+          const result = options.onSubmit(state.context.values, {
             initialValues: state.context.initialValues,
             changes,
-          })
-          .then((result) => {
+          });
+          if (isPromise(result)) {
+            result
+              .then((result) => {
+                send({
+                  type: EventType.SubmissionSuccess,
+                  payload: {
+                    result,
+                  },
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                send({
+                  type: EventType.SubmissionError,
+                  payload: {
+                    error: error.message,
+                  },
+                });
+              });
+          } else {
             send({
               type: EventType.SubmissionSuccess,
               payload: {
                 result,
               },
             });
-          })
-          .catch((error) => {
-            console.log(error);
-            send({
-              type: EventType.SubmissionError,
-              payload: {
-                error: error.message,
-              },
-            });
+          }
+        } catch (error) {
+          console.log(error);
+          send({
+            type: EventType.SubmissionError,
+            payload: {
+              error: error.message,
+            },
           });
+        }
+
         break;
       }
       default:

@@ -4,60 +4,98 @@ slug: /
 hide_table_of_contents: true
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 React Next Form is a lightweight React library for form state management. It eliminates a lot of boilerplate code, and less code means fewer bugs and things to worry about.
 
 ## Installation
 
 React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduction) for immutable updates and [yup](https://github.com/jquense/yup) for schema validation.
 
-```bash
-# npm
-npm i --save react-next-form immer yup
+<Tabs
+  defaultValue="yarn"
+  values={[
+    {label: "Yarn", value: "yarn"},
+    {label: "NPM", value: "npm"},
+  ]}>
+  <TabItem value="yarn">
 
-# or yarn
-yarn add -E react-next-form immer yup
-```
+  ```bash
+  yarn add -E react-next-form immer yup
+  ```
 
-## Basic form
+  </TabItem>
+  <TabItem value="npm">
 
-```jsx
-import React from "react";
-import { useForm } from "react-next-form";
+  ```bash
+  npm i --save react-next-form immer yup
+  ```
 
-export default function App() {
-  const form = useForm({
-    initialValues: {
-      name: "",
-    },
-    onSubmit: async (values) => {
-      alert(`Hey ${values.name?.length > 0 ? values.name : "buddy"}`);
-    },
-  });
+  </TabItem>
+</Tabs>
 
-  return (
-    <div className="App">
-      <h1>Hello {form.values.name.length > 0 ? form.values.name : "buddy"}!</h1>
+## The gist
+
+<Tabs
+  defaultValue="js"
+  values={[
+    {label: "Javascript", value: "js"},
+    {label: "Typescript", value: "ts"},
+  ]}>
+  <TabItem value="js">
+
+  ```jsx
+  import React from "react";
+  import { useForm } from "react-next-form";
+
+  export default function BasicForm() {
+    const form = useForm({
+      initialValues: { name: "" },
+      onSubmit: async (values) =>  alert(values.name);
+    });
+
+    return (
       <form onSubmit={() => form.submit()}>
-        <div className="input">
-          <label htmlFor="foo">Your name:</label>
-          <input
-            id="foo"
-            placeholder="type your name"
-            type="text"
-            {...form.fieldProps("name")}
-          />
-        </div>
+        <input placeholder="type your name" {...form.fieldProps("name")} />
         <button type="submit">Submit</button>
       </form>
-    </div>
-  );
-}
-```
+    );
+  }
+  ```
 
-<iframe
-  src="https://codesandbox.io/embed/react-next-form-hello-world-lqzsl?fontsize=14&hidenavigation=1&theme=dark"
-  style={{width:"100%", height: 500, border:0, borderRadius: 4, overflow: "hidden"}}
-  title="React Next Form - Hello world"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+  </TabItem>
+  <TabItem value="ts">
+
+  ```tsx
+  import React from "react";
+  import { useForm } from "react-next-form";
+
+  interface Values {
+    name: string;
+  }
+
+  export default function BasicForm() {
+    const form = useForm<Values>({
+      initialValues: {
+        name: "",
+      },
+      onSubmit: async (values) => {
+        alert(`Hey ${values.name?.length > 0 ? values.name : "buddy"}`);
+      },
+    });
+
+    return (
+      <form onSubmit={() => form.submit()}>
+        <input placeholder="type your name" {...form.fieldProps("name")} />
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+  ```
+
+  </TabItem>
+</Tabs>
+
+
+[![Edit React Next Form - Basic form](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-next-form-basic-form-lqzsl?fontsize=14&hidenavigation=1&module=%2Fsrc%2FBasicForm.tsx&theme=dark)

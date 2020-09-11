@@ -39,3 +39,7 @@ export async function delay(ms: number) {
     setTimeout(resolve, ms);
   });
 }
+
+export function isPromise<Value = any>(x: any): x is Promise<Value> {
+  return x != null && typeof x.then === "function";
+}

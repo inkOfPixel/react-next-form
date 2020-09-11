@@ -12,7 +12,7 @@ export interface FormOptions<
   onSubmit: (
     values: Values,
     context: SubmissionContext<Values>
-  ) => Promise<SubmissionResult>;
+  ) => Promise<SubmissionResult> | SubmissionResult;
   validationSchema?: ObjectSchema<Values>;
 }
 

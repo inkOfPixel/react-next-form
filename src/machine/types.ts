@@ -97,7 +97,7 @@ export interface SubmitEvent {
 export interface SubmitSuccessEvent<SubmissionResult> {
   type: EventType.SubmissionSuccess;
   payload: {
-    result: SubmissionResult;
+    result?: SubmissionResult;
   };
 }
 
