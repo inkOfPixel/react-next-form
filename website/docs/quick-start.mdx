@@ -35,7 +35,7 @@ React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduct
   </TabItem>
 </Tabs>
 
-## The gist
+## Basic form
 
 <Tabs
   defaultValue="js"
@@ -52,14 +52,14 @@ React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduct
   export default function BasicForm() {
     const form = useForm({
       initialValues: { name: "" },
-      onSubmit: async (values) =>  alert(values.name);
+      onSubmit: values =>  alert(values.name);
     });
 
     return (
-      <form onSubmit={() => form.submit()}>
+      <div>
         <input placeholder="type your name" {...form.fieldProps("name")} />
-        <button type="submit">Submit</button>
-      </form>
+        <button onClick={form.submit}>Submit</button>
+      </div>
     );
   }
   ```
@@ -77,19 +77,15 @@ React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduct
 
   export default function BasicForm() {
     const form = useForm<Values>({
-      initialValues: {
-        name: "",
-      },
-      onSubmit: async (values) => {
-        alert(`Hey ${values.name?.length > 0 ? values.name : "buddy"}`);
-      },
+      initialValues: { name: "" },
+      onSubmit: values => alert(values.name)
     });
 
     return (
-      <form onSubmit={() => form.submit()}>
+      <div>
         <input placeholder="type your name" {...form.fieldProps("name")} />
-        <button type="submit">Submit</button>
-      </form>
+        <button onClick={form.submit}>Submit</button>
+      </div>
     );
   }
   ```

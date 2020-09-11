@@ -2,7 +2,7 @@ import { Patch } from "immer";
 import { ObjectSchema } from "yup";
 import { DeepFlagMap, FormStatus } from "./machine/types";
 
-export interface FormOptions<
+export interface FormConfig<
   Values extends Record<string, any>,
   SubmissionResult = any
 > {
@@ -40,7 +40,7 @@ export interface FormContext<
   reset: (values?: Values, options?: ResetOptions) => void;
   // Field
   fieldProps: <FieldValue = any>(
-    options: FieldPropsOptions<FieldValue> | string
+    options: FieldConfig<FieldValue> | string
   ) => FieldProps;
   setFieldValue: <FieldValue = any>(
     fieldPath: string,
@@ -100,7 +100,7 @@ export interface ArrayField<ItemValue = any> {
   replace: (index: number, value: ItemValue) => void;
 }
 
-export interface FieldPropsOptions<FieldValue = any> {
+export interface FieldConfig<FieldValue = any> {
   name: string;
   type?: string;
   /** Used for checkboxes */

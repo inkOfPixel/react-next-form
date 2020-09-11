@@ -1,10 +1,10 @@
 import { get } from "lodash";
 import React from "react";
 import { useFormContext } from "./FormContext";
-import { Field, FieldPropsOptions, FieldError } from "./types";
+import { Field, FieldConfig, FieldError } from "./types";
 
 export function useField<Value = any>(
-  options: string | FieldPropsOptions<Value>
+  options: string | FieldConfig<Value>
 ): Field<Value> {
   const state = useFormContext();
   let fieldPath = typeof options === "string" ? options : options.name;

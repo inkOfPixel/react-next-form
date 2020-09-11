@@ -3,7 +3,7 @@ import { get, isEqual } from "lodash";
 import React from "react";
 import { createFormMachine } from "./machine";
 import { ChangeType, EventType, FormStatus } from "./machine/types";
-import { FieldProps, FormContext, FormOptions, ResetOptions } from "./types";
+import { FieldProps, FormContext, FormConfig, ResetOptions } from "./types";
 import { compressPatches, isEvent, validate, isPromise } from "./utils";
 import { useMachine } from "./utils/useMachine";
 import { useLatestRef } from "./utils/useLatestRef";
@@ -15,12 +15,12 @@ export function useForm<
   Values extends Record<string, any> = any,
   SubmissionResult = any
 >(
-  options: FormOptions<Values, SubmissionResult>
+  config: FormConfig<Values, SubmissionResult>
 ): FormContext<Values, SubmissionResult> {
   const [state, send] = useMachine(() => {
     return createFormMachine<Values, SubmissionResult>({
-      initialValues: options.initialValues || {},
-      values: options.initialValues || {},
+      initialValues: config.initialValues || {},
+      values: config.initialValues || {},
       validationErrors: {},
       submission: {
         result: undefined,
@@ -30,7 +30,7 @@ export function useForm<
       patches: [],
       inversePatches: [],
       touchedFields: {},
-      shouldValidate: options.validationSchema != null,
+      shouldValidate: config.validationSchema != null,
     });
   });
 
@@ -60,8 +60,8 @@ export function useForm<
   React.useEffect(() => {
     switch (state.value) {
       case FormStatus.Validate: {
-        if (options.validationSchema) {
-          validate(options.validationSchema, state.context.values, (error) => {
+        if (config.validationSchema) {
+          validate(config.validationSchema, state.context.values, (error) => {
             if (state.context.lastChangedAt === lastChangedAtRef.current) {
               if (error) {
                 send({
@@ -82,7 +82,7 @@ export function useForm<
       }
       case FormStatus.Submit: {
         try {
-          const result = options.onSubmit(state.context.values, {
+          const result = config.onSubmit(state.context.values, {
             initialValues: state.context.initialValues,
             changes,
           });
@@ -131,11 +131,11 @@ export function useForm<
   }, [state.value]);
 
   React.useEffect(() => {
-    if (options.enableReinitialize) {
+    if (config.enableReinitialize) {
       send({
         type: EventType.Reset,
         payload: {
-          values: options.initialValues,
+          values: config.initialValues,
           options: {
             keepDirtyFields: true,
             keepTouchedStatus: true,
@@ -143,7 +143,7 @@ export function useForm<
         },
       });
     }
-  }, [options.initialValues]);
+  }, [config.initialValues]);
 
   const submit = React.useCallback(() => {
     send({

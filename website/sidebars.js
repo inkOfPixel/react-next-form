@@ -7,7 +7,13 @@ module.exports = {
     {
       type: "category",
       label: "Guides",
-      items: ["basic-form", "validation", "array-fields", "form-submission"],
+      items: [
+        "validation",
+        "array-fields",
+        "form-submission",
+        "partial-reset",
+        "integration",
+      ],
     },
     {
       type: "category",
