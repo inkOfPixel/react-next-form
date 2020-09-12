@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[22],{78:function(a){a.exports=JSON.parse('{"allTagsPath":"/react-next-form/blog/tags","slug":"v-1","name":"v1","count":1,"permalink":"/react-next-form/blog/tags/v-1"}')}}]);
