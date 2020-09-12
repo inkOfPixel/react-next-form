@@ -1,18 +1,18 @@
 module.exports = {
   title: "React Next Form",
   tagline: "Build complex form with ease",
-  url: "https://your-docusaurus-test-site.com",
-  baseUrl: "/",
+  url: "https://inkOfPixel.github.io",
+  baseUrl: "/react-next-form/",
   onBrokenLinks: "throw",
-  favicon: "img/favicon.ico",
+  favicon: "/img/favicon.ico",
   organizationName: "inkOfPixel", // Usually your GitHub org/user name.
   projectName: "react-next-form", // Usually your repo name.
   themeConfig: {
     navbar: {
       title: "React Next Form",
       logo: {
-        alt: "React Next Form logog",
-        src: "img/logo.svg",
+        alt: "React Next Form logo",
+        src: "/react-next-form/img/logo.svg",
       },
       items: [
         {
@@ -33,15 +33,15 @@ module.exports = {
       style: "dark",
       links: [
         {
-          title: "Docs",
+          title: "Learn",
           items: [
             {
-              label: "Style Guide",
+              label: "Quickstart",
               to: "docs/",
             },
             {
-              label: "Second Doc",
-              to: "docs/doc2/",
+              label: "API Reference",
+              to: "docs/use-form",
             },
           ],
         },
@@ -49,17 +49,8 @@ module.exports = {
           title: "Community",
           items: [
             {
-              label: "Stack Overflow",
-              href:
-                "https://stackoverflow.com/questions/tagged/react-next-form",
-            },
-            {
-              label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
-            },
-            {
               label: "Twitter",
-              href: "https://twitter.com/docusaurus",
+              href: "https://twitter.com/dhmacs",
             },
           ],
         },

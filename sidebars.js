@@ -7,6 +7,7 @@ module.exports = {
     {
       type: "category",
       label: "Guides",
+      collapsed: false,
       items: [
         "validation",
         "array-fields",

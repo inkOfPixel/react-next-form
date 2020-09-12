@@ -1,72 +1,33 @@
-# React Next Form
+# Website
 
-React primitives to quickly build complex form behaviors
+This website is built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
-![npm](https://img.shields.io/npm/v/react-next-form)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-next-form)
+### Installation
 
-## Install
-
-```bash
-yarn add -E react-next-form immer
+```
+$ yarn
 ```
 
-## Contribute
+### Local Development
 
-### Install dependencies
-
-```bash
-npm install # or yarn
+```
+$ yarn start
 ```
 
-If you are making changes to the documentation site, install docs dependencies:
+This command starts a local development server and open up a browser window. Most changes are reflected live without having to restart the server.
 
-```bash
-cd docs; npm install # or cd docs; yarn
+### Build
+
+```
+$ yarn build
 ```
 
-### Commit messages
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
-Based on the contribution, format your commit message this way so that the version is correctly bumped:
+### Deployment
 
-- If the contribution is a breaking change, put `BREAKING CHANGE` or `major` somewhere in your commit.
-- If the contribution is a new feature format your message like this "`feat`: added this new cool stuff". You can also use `minor` or `feature`
-- All other changes will increment the patch version
-
-In case you might want to skip version bumping just add `[skip ci]` to your commit.
-
-### Publishing to NPM
-
-To publish a new version to npm, just create a Github release. Once you create the release a Github workflow will take care of the publishing process.
-
-### Commands
-
-The recommended workflow is to run TSDX in one terminal:
-
-```bash
-npm start # or yarn start
+```
+$ GIT_USER=<Your GitHub username> USE_SSH=true yarn deploy
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
-
-To do a one-off build, use `npm run build` or `yarn build`.
-
-To run tests, use `npm test` or `yarn test`.
-
-To run docs use `npm run docs` or `yarn docs`.
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log("foo");
-}
-```
-
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
