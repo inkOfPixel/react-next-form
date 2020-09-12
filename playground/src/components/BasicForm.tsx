@@ -5,7 +5,7 @@ import { useForm } from "react-next-form";
 export default function BasicForm() {
   const form = useForm({
     initialValues: { name: "" },
-    onSubmit: (values) => alert(values.name),
+    onSubmit: (values: any) => alert(values.name),
   });
   return (
     <Flex bg="gray.900" justify="center" align="center" py="8" h="100vh">

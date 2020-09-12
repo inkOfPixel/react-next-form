@@ -2,10 +2,7 @@ import { Patch } from "immer";
 import { ObjectSchema } from "yup";
 import { DeepFlagMap, FormStatus } from "./machine/types";
 
-export interface FormConfig<
-  Values extends Record<string, any>,
-  SubmissionResult = any
-> {
+export interface FormConfig<Values extends object, SubmissionResult = any> {
   initialValues: Values;
   enableReinitialize?: boolean;
   reinitializeOptions?: ResetOptions;

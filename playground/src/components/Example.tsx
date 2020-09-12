@@ -52,7 +52,7 @@ export default function Example() {
       // email: yup.string().required("email is required"),
       // name: yup.string(),
     }),
-    onSubmit: async (values, context) => {
+    onSubmit: (values, context) => {
       console.log("Submit!", { values, context });
       return undefined;
     },
