@@ -4,8 +4,8 @@ slug: /
 hide_table_of_contents: true
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 React Next Form is a lightweight React library for form state management. It eliminates a lot of boilerplate code, and less code means fewer bugs and things to worry about.
 
@@ -21,19 +21,22 @@ React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduct
   ]}>
   <TabItem value="yarn">
 
-  ```bash
-  yarn add -E react-next-form immer yup
-  ```
+
+```bash
+yarn add -E react-next-form immer yup
+```
 
   </TabItem>
   <TabItem value="npm">
 
-  ```bash
-  npm i --save react-next-form immer yup
-  ```
+
+```bash
+npm i --save react-next-form immer yup
+```
 
   </TabItem>
 </Tabs>
+
 
 ## Basic form
 
@@ -45,50 +48,52 @@ React Next Form relies on [immer](https://immerjs.github.io/immer/docs/introduct
   ]}>
   <TabItem value="js">
 
-  ```jsx
-  import React from "react";
-  import { useForm } from "react-next-form";
 
-  export default function BasicForm() {
-    const form = useForm({
-      initialValues: { name: "" },
-      onSubmit: values =>  alert(values.name);
-    });
+```jsx
+import React from "react";
+import { useForm } from "react-next-form";
 
-    return (
-      <div>
-        <input placeholder="type your name" {...form.fieldProps("name")} />
-        <button onClick={form.submit}>Submit</button>
-      </div>
-    );
-  }
-  ```
+export default function BasicForm() {
+  const form = useForm({
+    initialValues: { name: "" },
+    onSubmit: values =>  alert(values.name);
+  });
+
+  return (
+    <div>
+      <input placeholder="type your name" {...form.fieldProps("name")} />
+      <button onClick={form.submit}>Submit</button>
+    </div>
+  );
+}
+```
 
   </TabItem>
   <TabItem value="ts">
 
-  ```tsx
-  import React from "react";
-  import { useForm } from "react-next-form";
 
-  interface Values {
-    name: string;
-  }
+```tsx
+import React from "react";
+import { useForm } from "react-next-form";
 
-  export default function BasicForm() {
-    const form = useForm<Values>({
-      initialValues: { name: "" },
-      onSubmit: values => alert(values.name)
-    });
+interface Values {
+  name: string;
+}
 
-    return (
-      <div>
-        <input placeholder="type your name" {...form.fieldProps("name")} />
-        <button onClick={form.submit}>Submit</button>
-      </div>
-    );
-  }
-  ```
+export default function BasicForm() {
+  const form = useForm<Values>({
+    initialValues: { name: "" },
+    onSubmit: (values) => alert(values.name),
+  });
+
+  return (
+    <div>
+      <input placeholder="type your name" {...form.fieldProps("name")} />
+      <button onClick={form.submit}>Submit</button>
+    </div>
+  );
+}
+```
 
   </TabItem>
 </Tabs>

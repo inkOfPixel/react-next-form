@@ -8,32 +8,34 @@ import styles from "./styles.module.css";
 
 const features = [
   {
-    title: "Simple API",
+    title: "Fully typed",
     imageUrl: "img/undraw_docusaurus_mountain.svg",
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        React Next Form codebase is built in Typescript allowing you to fully
+        type your forms and get rid of annoying bugs.
       </>
     ),
   },
   {
-    title: "Supports realtime updates",
+    title: "Easy to adopt",
     imageUrl: "img/undraw_docusaurus_tree.svg",
     description: (
       <>
-        React Next Form supports realtime updates with partial reset, so the
-        user will get updated data without losing drafted fields
+        Since form state is local, React Next Form can be adopted incrementally
+        without an high impact on your bundle size. It also help you save lot of
+        boilerplate code saving you time and bytes.
       </>
     ),
   },
   {
-    title: "Validation with Yup",
+    title: "Supports advanced use cases",
     imageUrl: "img/undraw_docusaurus_react.svg",
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        React Next Form supports realtime updates with partial reset, so the
+        user will get updated data without losing drafted fields. It has builtin
+        support for array fields and can be easily wired up with UI libraries.
       </>
     ),
   },

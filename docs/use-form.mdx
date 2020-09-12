@@ -6,8 +6,6 @@ title: useForm()
 It receive `FormConfig` and returns a `FormContext` that can be used to
 manipulate form state and passed down to nested components via a [`FormProvider`](form-provider)
 
-import Badge from "../components/Badge";
-
 ```ts
 function useForm(config: FormConfig): FormContext;
 ```
@@ -27,9 +25,7 @@ interface FormConfig<Values, SubmissionResult> {
 }
 ```
 
-### initialValues
-
-<Badge color="#1877F2">Required</Badge>
+### initialValues <span class="badge badge--primary">Required</span>
 
 The initial field values of the form.
 
@@ -41,9 +37,7 @@ TBD
 
 TBD - ResetOptions
 
-### onSubmit
-
-<Badge color="#1877F2">Required</Badge>
+### onSubmit <span class="badge badge--primary">Required</span>
 
 ```ts
 function onSubmit(

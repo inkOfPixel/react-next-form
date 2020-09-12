@@ -29,6 +29,10 @@ module.exports = {
         },
       ],
     },
+    prism: {
+      theme: require("prism-react-renderer/themes/oceanicNext"),
+      darkTheme: require("prism-react-renderer/themes/oceanicNext"),
+    },
     footer: {
       style: "dark",
       links: [
