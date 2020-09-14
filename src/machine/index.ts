@@ -8,6 +8,7 @@ import { setValidationErrors } from "./actions/setValidationErrors";
 import { setSubmissionError } from "./actions/setSubmissionError";
 import { clearSubmissionError } from "./actions/clearSubmissionError";
 import { clearValidationErrors } from "./actions/clearValidationErrors";
+import { incrementSubmissionCount } from "./actions/incrementSubmissionCount";
 import { resetValues } from "./actions/resetValues";
 import { MachineContext, MachineEvent } from "./types";
 
@@ -101,6 +102,7 @@ export function createFormMachine<Values, SubmissionResult>(
             ],
             SUBMIT: {
               target: "submit",
+              actions: ["incrementSubmissionCount"],
             },
             RESET: [
               {
@@ -163,6 +165,7 @@ export function createFormMachine<Values, SubmissionResult>(
           on: {
             SUBMIT: {
               target: "submit",
+              actions: ["incrementSubmissionCount"],
             },
             CHANGE: [
               {
@@ -196,9 +199,6 @@ export function createFormMachine<Values, SubmissionResult>(
         },
         submitted: {
           on: {
-            SUBMIT: {
-              target: "submit",
-            },
             CHANGE: [
               {
                 target: "pendingValidation",
@@ -240,6 +240,7 @@ export function createFormMachine<Values, SubmissionResult>(
         resetValues,
         setSubmissionError,
         clearSubmissionError,
+        incrementSubmissionCount,
       },
     }
   );

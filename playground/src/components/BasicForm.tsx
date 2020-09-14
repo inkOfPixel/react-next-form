@@ -12,7 +12,7 @@ export default function BasicForm() {
       <Stack direction="column">
         <Input placeholder="type your name" {...form.fieldProps("name")} />
         <Button colorScheme="blue" onClick={form.submit}>
-          Submit
+          Submit ({form.submission.count})
         </Button>
       </Stack>
     </Flex>
