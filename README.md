@@ -70,3 +70,7 @@ if (__DEV__) {
 ```
 
 You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+
+## Documentation
+
+The documentation website is on the `documentation` branch. To deploy a new version of the website, simply push to that branch, or merge a pull request to that branch.
