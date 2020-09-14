@@ -9,6 +9,7 @@ function setValidationErrorsRecipe<Values, SubmissionResult>(
   if (event.type !== EventType.ValidationError) {
     throw new Error(`unknown event type "${event.type}"`);
   }
+  context.validationErrors = {};
   event.payload.error?.inner.forEach((error) => {
     context.validationErrors[error.path] = error.message;
   });

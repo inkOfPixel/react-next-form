@@ -6,6 +6,7 @@ export interface MachineContext<Values, SubmissionResult = unknown> {
   initialValues: Values;
   values: Values;
   validationErrors: Record<string, string>;
+  dismissedErrors: Record<string, boolean>;
   submission: {
     result?: SubmissionResult;
     error?: string;

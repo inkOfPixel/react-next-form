@@ -43,6 +43,10 @@ export function useField<Value = any>(
     state.dismissValidationErrors(fieldPath);
   }, [fieldPath, state.dismissValidationErrors]);
 
+  const isErrorDismissed = React.useMemo(() => {
+    return state.isErrorDismissed(fieldPath);
+  }, [fieldPath, state.isErrorDismissed]);
+
   const isTouched = React.useMemo(() => {
     return state.isTouched(fieldPath);
   }, [fieldPath, state.isTouched]);
@@ -63,6 +67,7 @@ export function useField<Value = any>(
     setTouched,
     reset,
     dismissError,
+    isErrorDismissed,
     isTouched,
     isDirty,
     props,

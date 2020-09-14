@@ -8,7 +8,7 @@ export default function BasicForm() {
     onSubmit: (values: any) => alert(values.name),
   });
   return (
-    <Flex bg="gray.900" justify="center" align="center" py="8" h="100vh">
+    <Flex justify="center" align="center" py="8">
       <Stack direction="column">
         <Input placeholder="type your name" {...form.fieldProps("name")} />
         <Button colorScheme="blue" onClick={form.submit}>

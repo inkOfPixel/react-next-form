@@ -1,26 +1,27 @@
-import * as React from "react";
-import { useForm, useFormContext, FormProvider } from "react-next-form";
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
-  Text,
-  Stack,
-  Heading,
-  SimpleGrid,
   Button,
-  FormControl,
+  CloseButton,
   Flex,
+  FormControl,
   FormLabel,
-  Switch,
+  Heading,
   Input,
+  SimpleGrid,
   Spinner,
+  Stack,
+  Switch,
   SwitchProps,
+  Text,
 } from "@chakra-ui/core";
-import ReactJson from "react-json-view";
 import { uniqueId } from "lodash";
-// import { enablePatches } from "immer";
+import * as React from "react";
+import ReactJson from "react-json-view";
+import { FormProvider, useForm, useFormContext } from "react-next-form";
 import * as yup from "yup";
-
-// enablePatches();
 
 interface ExampleValues {
   email: string;
@@ -36,12 +37,13 @@ export default function Example() {
   const [initialValues, setInitialValues] = React.useState<ExampleValues>({
     email: "",
     name: "",
-    addresses: [
-      {
-        id: uniqueId("#"),
-        street: "",
-      },
-    ],
+    addresses: [],
+    // addresses: [
+    //   {
+    //     id: uniqueId("#"),
+    //     street: "",
+    //   },
+    // ],
   });
   const form = useForm<ExampleValues>({
     initialValues,
@@ -49,8 +51,10 @@ export default function Example() {
     validationSchema: yup.object<ExampleValues>().shape<any>({
       email: yup.string().required(),
       name: yup.string().required(),
-      // email: yup.string().required("email is required"),
-      // name: yup.string(),
+      addresses: yup
+        .array()
+        .min(1, "Inserisci almeno un articolo")
+        .of(yup.object()),
     }),
     onSubmit: (values, context) => {
       console.log("Submit!", { values, context });
@@ -161,6 +165,24 @@ export default function Example() {
                   Add
                 </Button>
               </Stack>
+              {form.validationErrors["addresses"] &&
+                !form.isErrorDismissed("addresses") &&
+                form.submission.count > 0 && (
+                  <Alert status="error">
+                    <AlertIcon />
+                    <AlertTitle mr={2}>
+                      {form.validationErrors["addresses"]}
+                    </AlertTitle>
+                    <CloseButton
+                      position="absolute"
+                      right="8px"
+                      top="8px"
+                      onClick={() => {
+                        form.dismissValidationErrors("addresses");
+                      }}
+                    />
+                  </Alert>
+                )}
               <Stack direction="column">
                 {form.values.addresses?.map((address, index) => {
                   return (

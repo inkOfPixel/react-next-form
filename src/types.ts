@@ -48,6 +48,7 @@ export interface FormContext<
   dismissValidationErrors: (fieldPaths?: string[] | string) => void;
   isTouched(fieldPath: string): boolean;
   isFieldDirty(fieldPath: string): boolean;
+  isErrorDismissed(fieldPath: string): boolean;
   // Array field
   append: <ItemValue = any>(fieldPath: string, value: ItemValue) => void;
   swap: (fieldPath: string, indexA: number, indexB: number) => void;
@@ -76,6 +77,7 @@ export interface Field<FieldValue = any> {
   dismissError: () => void;
   isTouched: boolean;
   isDirty: boolean;
+  isErrorDismissed: boolean;
   props: FieldProps;
 }
 
@@ -84,6 +86,7 @@ export interface ArrayField<ItemValue = any> {
   value?: ItemValue[];
   error?: FieldError;
   isDirty: boolean;
+  isErrorDismissed: boolean;
   /** Replace the entire array */
   set: (array: ItemValue[]) => void;
   reset: () => void;

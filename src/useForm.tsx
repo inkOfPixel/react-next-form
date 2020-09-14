@@ -22,6 +22,7 @@ export function useForm<
       initialValues: config.initialValues || {},
       values: config.initialValues || {},
       validationErrors: {},
+      dismissedErrors: {},
       submission: {
         result: undefined,
         error: undefined,
@@ -314,6 +315,15 @@ export function useForm<
     [state.context.initialValues, state.context.values]
   );
 
+  const isErrorDismissed = React.useCallback<
+    FormContext<Values, SubmissionResult>["isTouched"]
+  >(
+    (fieldPath) => {
+      return state.context.dismissedErrors[fieldPath] === true;
+    },
+    [state.context.dismissedErrors]
+  );
+
   const isDirty = React.useMemo<boolean>(() => {
     return !isEqual(state.context.initialValues, state.context.values);
   }, [state.context.initialValues, state.context.values]);
@@ -415,6 +425,7 @@ export function useForm<
       isTouched,
       isFieldDirty,
       isDirty,
+      isErrorDismissed,
       changes,
       validationErrors: state.context.validationErrors,
       dismissValidationErrors,
