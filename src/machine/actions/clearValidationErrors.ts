@@ -1,0 +1,15 @@
+import { assign } from "@xstate/fsm";
+import produce, { Draft } from "immer";
+import { MachineContext, MachineEvent, EventType } from "../types";
+
+function clearValidationErrorsRecipe<Values, SubmissionResult>(
+  context: Draft<MachineContext<Values, SubmissionResult>>,
+  event: MachineEvent<Values, SubmissionResult>
+) {
+  context.validationErrors = {};
+  context.dismissedErrors = {};
+}
+
+export const clearValidationErrors = assign(
+  produce(clearValidationErrorsRecipe)
+);

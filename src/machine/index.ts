@@ -11,6 +11,7 @@ import { dismissValidationErrors } from "./actions/dismissValidationErrors";
 import { incrementSubmissionCount } from "./actions/incrementSubmissionCount";
 import { resetSubmissionCount } from "./actions/resetSubmissionCount";
 import { resetDismissedValidationErrors } from "./actions/resetDismissedValidationErrors";
+import { clearValidationErrors } from "./actions/clearValidationErrors";
 import { resetValues } from "./actions/resetValues";
 import { MachineContext, MachineEvent } from "./types";
 
@@ -61,7 +62,7 @@ export function createFormMachine<Values, SubmissionResult>(
               actions: ["setFieldTouched"],
             },
             DISMISS_VALIDATION_ERROR: {
-              actions: ["clearValidationErrors"],
+              actions: ["dismissValidationErrors"],
             },
             DISMISS_SUBMISSION_ERROR: {
               actions: ["clearSubmissionError"],
@@ -250,6 +251,7 @@ export function createFormMachine<Values, SubmissionResult>(
         setValues,
         setFieldTouched,
         setValidationErrors,
+        clearValidationErrors,
         dismissValidationErrors,
         resetValues,
         setSubmissionError,
