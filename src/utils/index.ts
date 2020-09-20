@@ -22,7 +22,6 @@ export const validate = async <V extends object>(
   try {
     await schema.validate(values, {
       abortEarly: false,
-      strict: true,
     });
     onDone();
   } catch (error) {
