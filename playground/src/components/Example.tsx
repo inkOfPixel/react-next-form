@@ -62,7 +62,7 @@ export default function Example() {
     },
   });
 
-  useWhyDidYouUpdate("FORM", form);
+  // useWhyDidYouUpdate("FORM", form);
 
   return (
     <FormProvider form={form}>

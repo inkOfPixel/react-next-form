@@ -14,6 +14,7 @@ import * as React from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Example from "./components/Example";
+import Validation from "./components/Validation";
 import BasicForm from "./components/BasicForm";
 
 const theme = extendTheme({
@@ -44,6 +45,9 @@ export const App = () => (
             <Route path="/kitchen-sink">
               <Example />
             </Route>
+            <Route path="/validation">
+              <Validation />
+            </Route>
             <Route path="/">
               <BasicForm />
             </Route>
@@ -66,6 +70,9 @@ function PlaygroundMenu(props: Partial<MenuProps>) {
         </MenuItem>
         <MenuItem as={Link} to="/kitchen-sink">
           Kitchen sink
+        </MenuItem>
+        <MenuItem as={Link} to="/validation">
+          Validation
         </MenuItem>
       </MenuList>
     </Menu>

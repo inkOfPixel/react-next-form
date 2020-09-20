@@ -1,6 +1,6 @@
 import { assign } from "@xstate/fsm";
 import produce, { Draft } from "immer";
-import { MachineContext, MachineEvent, EventType } from "../types";
+import { MachineContext, MachineEvent } from "../types";
 
 function clearValidationErrorsRecipe<Values, SubmissionResult>(
   context: Draft<MachineContext<Values, SubmissionResult>>,
