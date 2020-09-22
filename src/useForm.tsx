@@ -98,7 +98,6 @@ export function useForm<
                 });
               })
               .catch((error) => {
-                console.log(error);
                 send({
                   type: EventType.SubmissionError,
                   payload: {
@@ -115,7 +114,6 @@ export function useForm<
             });
           }
         } catch (error) {
-          console.log(error);
           send({
             type: EventType.SubmissionError,
             payload: {
