@@ -1,5 +1,5 @@
-import React, { DependencyList } from "react";
-import { StateMachine, EventObject, Typestate, interpret } from "@xstate/fsm";
+import { EventObject, interpret, StateMachine, Typestate } from "@xstate/fsm";
+import React from "react";
 import { EventType } from "../machine/types";
 import { useMemoize } from "./useMemoize";
 
