@@ -34,16 +34,10 @@ interface ExampleValues {
 }
 
 export default function Example() {
-  const [initialValues, setInitialValues] = React.useState<ExampleValues>({
+  const [initialValues] = React.useState<ExampleValues>({
     email: "",
     name: "",
     addresses: [],
-    // addresses: [
-    //   {
-    //     id: uniqueId("#"),
-    //     street: "",
-    //   },
-    // ],
   });
   const form = useForm<ExampleValues>({
     initialValues,
@@ -61,8 +55,6 @@ export default function Example() {
       return undefined;
     },
   });
-
-  // useWhyDidYouUpdate("FORM", form);
 
   return (
     <FormProvider form={form}>
@@ -146,6 +138,7 @@ export default function Example() {
                   {...form.fieldProps("email")}
                 />
               </FormControl> */}
+              <p>Email</p>
               <input type="text" {...form.fieldProps("email")} />
               <FormControl id="name">
                 <FormLabel color="white">First name</FormLabel>
@@ -259,6 +252,12 @@ export default function Example() {
                 </Text>
                 <ReactJson name="changes" src={form.changes} collapsed />
               </Stack>
+              <Stack direction="column">
+                <Text fontSize="xl" fontWeight="medium">
+                  form.submission
+                </Text>
+                <ReactJson name="changes" src={form.submission} collapsed />
+              </Stack>
             </Box>
           </SimpleGrid>
         </Stack>
@@ -276,37 +275,37 @@ function CustomSwitch(props: SwitchProps) {
   return <Switch {...props} {...fieldProps} isChecked={fieldProps.checked} />;
 }
 
-function useWhyDidYouUpdate(name: string, props: any) {
-  // Get a mutable ref object where we can store props ...
-  // ... for comparison next time this hook runs.
-  const previousProps = React.useRef<any>();
+// function useWhyDidYouUpdate(name: string, props: any) {
+//   // Get a mutable ref object where we can store props ...
+//   // ... for comparison next time this hook runs.
+//   const previousProps = React.useRef<any>();
 
-  React.useEffect(() => {
-    if (previousProps.current) {
-      // Get all keys from previous and current props
-      const allKeys = Object.keys({ ...previousProps.current, ...props });
-      // Use this object to keep track of changed props
-      const changesObj = {};
-      // Iterate through keys
-      allKeys.forEach((key) => {
-        // If previous is different from current
-        if (previousProps.current[key] !== props[key]) {
-          // Add to changesObj
-          // @ts-ignore
-          changesObj[key] = {
-            from: previousProps.current[key],
-            to: props[key],
-          };
-        }
-      });
+//   React.useEffect(() => {
+//     if (previousProps.current) {
+//       // Get all keys from previous and current props
+//       const allKeys = Object.keys({ ...previousProps.current, ...props });
+//       // Use this object to keep track of changed props
+//       const changesObj = {};
+//       // Iterate through keys
+//       allKeys.forEach((key) => {
+//         // If previous is different from current
+//         if (previousProps.current[key] !== props[key]) {
+//           // Add to changesObj
+//           // @ts-ignore
+//           changesObj[key] = {
+//             from: previousProps.current[key],
+//             to: props[key],
+//           };
+//         }
+//       });
 
-      // If changesObj not empty then output to console
-      if (Object.keys(changesObj).length) {
-        console.log("[why-did-you-update]", name, changesObj);
-      }
-    }
+//       // If changesObj not empty then output to console
+//       if (Object.keys(changesObj).length) {
+//         console.log("[why-did-you-update]", name, changesObj);
+//       }
+//     }
 
-    // Finally update previousProps with current props for next hook call
-    previousProps.current = props;
-  });
-}
+//     // Finally update previousProps with current props for next hook call
+//     previousProps.current = props;
+//   });
+// }

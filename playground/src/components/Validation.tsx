@@ -20,9 +20,10 @@ interface ExampleValues {
 }
 
 export default function Example() {
-  const [initialValues, setInitialValues] = React.useState<ExampleValues>({
+  const [initialValues] = React.useState<ExampleValues>({
     name: "",
   });
+  console.log("validation");
   const form = useForm<ExampleValues>({
     initialValues,
     enableReinitialize: true,
@@ -34,8 +35,6 @@ export default function Example() {
       return undefined;
     },
   });
-
-  // useWhyDidYouUpdate("FORM", form);
 
   return (
     <FormProvider form={form}>

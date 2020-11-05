@@ -12,6 +12,8 @@ import { incrementSubmissionCount } from "./actions/incrementSubmissionCount";
 import { resetSubmissionCount } from "./actions/resetSubmissionCount";
 import { resetDismissedValidationErrors } from "./actions/resetDismissedValidationErrors";
 import { clearValidationErrors } from "./actions/clearValidationErrors";
+import { requestSubmission } from "./actions/requestSubmission";
+import { dismissSubmissionRequest } from "./actions/dismissSubmissionRequest";
 import { resetValues } from "./actions/resetValues";
 import { MachineContext, MachineEvent } from "./types";
 
@@ -42,13 +44,25 @@ export function createFormMachine<Values, SubmissionResult>(
         },
         validate: {
           on: {
-            VALIDATION_SUCCESS: {
-              target: "valid",
-              actions: ["clearValidationErrors"],
-            },
+            VALIDATION_SUCCESS: [
+              {
+                target: "submit",
+                actions: [
+                  "clearValidationErrors",
+                  "dismissSubmissionRequest",
+                  "incrementSubmissionCount",
+                  "resetDismissedValidationErrors",
+                ],
+                cond: shouldSubmit,
+              },
+              {
+                target: "valid",
+                actions: ["clearValidationErrors"],
+              },
+            ],
             VALIDATION_ERROR: {
               target: "invalid",
-              actions: ["setValidationErrors"],
+              actions: ["setValidationErrors", "dismissSubmissionRequest"],
             },
             CHANGE: {
               target: "pendingValidation",
@@ -66,6 +80,9 @@ export function createFormMachine<Values, SubmissionResult>(
             },
             DISMISS_SUBMISSION_ERROR: {
               actions: ["clearSubmissionError"],
+            },
+            SUBMIT: {
+              actions: ["requestSubmission"],
             },
           },
         },
@@ -88,6 +105,9 @@ export function createFormMachine<Values, SubmissionResult>(
             },
             DISMISS_SUBMISSION_ERROR: {
               actions: ["clearSubmissionError"],
+            },
+            SUBMIT: {
+              actions: ["requestSubmission"],
             },
           },
         },
@@ -259,6 +279,8 @@ export function createFormMachine<Values, SubmissionResult>(
         incrementSubmissionCount,
         resetSubmissionCount,
         resetDismissedValidationErrors,
+        requestSubmission,
+        dismissSubmissionRequest,
       },
     }
   );
@@ -266,4 +288,10 @@ export function createFormMachine<Values, SubmissionResult>(
 
 const shouldValidate = <Values, SubmissionResult>(
   context: MachineContext<Values, SubmissionResult>
-): boolean => context.shouldValidate;
+): boolean => {
+  return context.shouldValidate;
+};
+
+const shouldSubmit = <Values, SubmissionResult>(
+  context: MachineContext<Values, SubmissionResult>
+): boolean => context.submission.waitingValidation === true;

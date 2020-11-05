@@ -28,6 +28,7 @@ export interface FormContext<
   isSubmitting: boolean;
   isDirty: boolean;
   submission: {
+    waitingValidation?: boolean;
     result?: SubmissionResult;
     error?: string;
     count: number;

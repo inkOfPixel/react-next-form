@@ -8,6 +8,7 @@ export interface MachineContext<Values, SubmissionResult = unknown> {
   validationErrors: Record<string, string>;
   dismissedErrors: Record<string, boolean>;
   submission: {
+    waitingValidation?: boolean;
     result?: SubmissionResult;
     error?: string;
     count: number;
